@@ -16,6 +16,8 @@ npx skills add ggwhite/share-html
 
 Deep dark theme with sticky TOC, gradient accents, and 18 interactive components. Best for research reports, code reviews, and comparative analysis.
 
+![editorial](screenshots/editorial.png)
+
 - Sticky left TOC with scroll tracking
 - Searchable/filterable data tables
 - Drag-and-drop Kanban boards
@@ -26,6 +28,8 @@ Deep dark theme with sticky TOC, gradient accents, and 18 interactive components
 
 Full-page slides with warm amber tones. Each section fills the viewport with large text and key metrics. Built for weekly reports and executive summaries.
 
+![briefing](screenshots/briefing.png)
+
 - One section per screen with scroll snap
 - Bottom dot navigation
 - Animated stat counters
@@ -34,6 +38,8 @@ Full-page slides with warm amber tones. Each section fills the viewport with lar
 ### dashboard
 
 Tab-based data dashboard with dense grid layouts. Three panels — overview, detail, and trends — packed with metrics, charts, and tables.
+
+![dashboard](screenshots/dashboard.png)
 
 - Tab switching with lazy chart initialization
 - Dense grid layouts (2-3 columns)
@@ -44,6 +50,8 @@ Tab-based data dashboard with dense grid layouts. Three panels — overview, det
 
 Light theme for technical documentation. Same dual-column TOC layout as editorial, but with a clean white background and GitHub-style code highlighting.
 
+![docs](screenshots/docs.png)
+
 - Light background (`#f8fafc`)
 - GitHub code highlighting theme
 - Collapsible FAQ sections
@@ -52,6 +60,8 @@ Light theme for technical documentation. Same dual-column TOC layout as editoria
 ### minimal
 
 Stripped-down single column, no TOC, no progress bar. Just the content, centered and clean. For when you need to share one conclusion or comparison fast.
+
+![minimal](screenshots/minimal.png)
 
 - `max-w-2xl` centered layout
 - No gradients, muted slate palette
