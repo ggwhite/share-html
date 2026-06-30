@@ -1,6 +1,15 @@
 ---
 name: share-html
-description: Use when the user asks to create a single-file HTML document intended to be shared with other people — research reports, comparison pages, decision documents, status updates, weekly reports, kanban-style trackers, one-pagers. Trigger phrases include 「做 HTML 給別人看」「產一份報告」「套我的 template」「用 share-html」「做一個給 XX 看」. Produces a self-contained `.html` file that opens with a double-click and renders with CDN-loaded Tailwind / Alpine.js. Five template styles available: editorial (default), briefing, dashboard, docs, minimal.
+description: >-
+  Use when the user asks to create a single-file HTML document intended to be
+  shared with other people — research reports, comparison pages, decision
+  documents, status updates, weekly reports, kanban-style trackers, one-pagers.
+  Produces a self-contained .html file that opens with a double-click and
+  renders with CDN-loaded Tailwind / Alpine.js. Five template styles available:
+  editorial (default), briefing, dashboard, docs, minimal.
+metadata:
+  author: ggwhite
+  version: "1.0.0"
 ---
 
 # share-html
