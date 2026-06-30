@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Briefing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-snap-type: y proximity;
+      overflow-y: scroll;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #0b1020;
+      background-image: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(251, 191, 36, 0.06) 0%, transparent 60%);
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: #e2e8f0;
+      margin: 0;
+    }
+
+    .slide {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      scroll-snap-align: start;
+    }
+
+    .text-gradient {
+      background: linear-gradient(to right, #fbbf24, #fb923c, #fb7185);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-badge {
+      background: linear-gradient(to bottom right, #fbbf24, #fb923c, #fb7185);
+    }
+
+    .top-bar-fill {
+      background: linear-gradient(to right, #fbbf24, #fb923c, #fb7185);
+      transition: width 0.1s linear;
+    }
+
+    .callout-top-bar {
+      background: linear-gradient(to right, #fbbf24, #fb923c, #fb7185);
+    }
+
+    .checklist-progress-fill {
+      background: linear-gradient(to right, #fbbf24, #fb923c, #fb7185);
+      transition: width 0.4s ease;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    [data-reveal].revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dot-nav-dot {
+      display: block;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .dot-nav-dot.active {
+      width: 12px;
+      height: 12px;
+      background: #fbbf24;
+    }
+    .dot-nav-dot.inactive {
+      width: 8px;
+      height: 8px;
+      background: #475569;
+    }
+    .dot-nav-dot.inactive:hover {
+      background: #94a3b8;
+    }
+
+    .todo-item input[type="checkbox"] {
+      accent-color: #fbbf24;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #0b1020; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+</head>
+
+<body x-data="page()" x-init="init()">
+
+  <!-- COMPONENT: TOP_BAR -->
+  <div class="fixed top-0 left-0 right-0 z-50 h-[2px] bg-slate-900/60">
+    <div class="top-bar-fill h-full" :style="`width: ${scrollProgress}%`"></div>
+  </div>
+
+  <!-- COMPONENT: DOT_NAV -->
+  <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-4 py-3 rounded-full bg-slate-900/80 border border-slate-800 backdrop-blur-sm">
+    <template x-for="(slide, i) in slides" :key="i">
+      <a :href="`#slide-${i}`"
+         class="dot-nav-dot"
+         :class="activeSlide === i ? 'active' : 'inactive'"
+         :title="slide.label"
+         @click.prevent="document.getElementById(`slide-${i}`).scrollIntoView({behavior:'smooth'})">
+      </a>
+    </template>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+       COMPONENT: HERO  (slide-0)
+  ════════════════════════════════════════ -->
+  <section id="slide-0" class="slide">
+    <div class="max-w-4xl mx-auto px-8 text-center">
+
+      <!-- SECTION_HEADER badge -->
+      <div class="flex justify-center mb-6" data-reveal>
+        <span class="section-badge text-white text-xs font-bold px-3 py-1 rounded-full tracking-widest uppercase">
+          01 / Briefing
+        </span>
+      </div>
+
+      <!-- chip -->
+      <div class="flex justify-center mb-6" data-reveal>
+        <span class="border border-amber-500/40 bg-amber-500/10 text-amber-300 text-sm font-medium px-4 py-1.5 rounded-full">
+          2026 Q2 第 26 週週報
+        </span>
+      </div>
+
+      <!-- title -->
+      <h1 class="text-6xl font-bold leading-tight mb-5" data-reveal>
+        本週<span class="text-gradient">重點摘要</span><br />與行動方向
+      </h1>
+
+      <!-- subtitle -->
+      <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-10" data-reveal>
+        涵蓋關鍵指標、本週進度與待辦清單，<br class="hidden sm:block"/>快速掌握本週全貌。
+      </p>
+
+      <!-- scroll hint -->
+      <div class="flex flex-col items-center gap-2 text-slate-600 text-sm" data-reveal>
+        <span>向下滾動</span>
+        <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       COMPONENT: STATS_ROW  (slide-1)
+  ════════════════════════════════════════ -->
+  <section id="slide-1" class="slide">
+    <div class="max-w-4xl mx-auto px-8 w-full">
+
+      <!-- SECTION_HEADER -->
+      <div class="flex items-center gap-3 mb-12" data-reveal>
+        <span class="section-badge text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">02</span>
+        <h2 class="text-3xl font-bold">重點<span class="text-gradient">數據</span></h2>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
+
+        <!-- stat 1 -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 flex flex-col gap-2" data-reveal data-counter data-value="847" data-format="plain" data-suffix="+">
+          <div class="text-slate-500 text-xs font-medium uppercase tracking-widest">總處理筆數</div>
+          <div class="text-4xl font-bold text-amber-400 counter-display tabular-nums">—</div>
+          <div class="text-slate-500 text-xs">較上週 ▲ 12%</div>
+        </div>
+
+        <!-- stat 2 -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 flex flex-col gap-2" data-reveal data-counter data-value="932" data-format="plain" data-suffix="">
+          <div class="text-slate-500 text-xs font-medium uppercase tracking-widest">活躍用戶</div>
+          <div class="text-4xl font-bold text-orange-400 counter-display tabular-nums">—</div>
+          <div class="text-slate-500 text-xs">本週高峰</div>
+        </div>
+
+        <!-- stat 3 -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 flex flex-col gap-2" data-reveal data-counter data-value="12" data-format="plain" data-suffix=" ms">
+          <div class="text-slate-500 text-xs font-medium uppercase tracking-widest">平均延遲</div>
+          <div class="text-4xl font-bold text-rose-400 counter-display tabular-nums">—</div>
+          <div class="text-slate-500 text-xs">P95 回應時間</div>
+        </div>
+
+        <!-- stat 4 -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 flex flex-col gap-2" data-reveal data-counter data-value="99" data-format="decimal" data-suffix="%">
+          <div class="text-slate-500 text-xs font-medium uppercase tracking-widest">系統可用率</div>
+          <div class="text-4xl font-bold text-emerald-400 counter-display tabular-nums">—</div>
+          <div class="text-slate-500 text-xs">SLA 目標 99%</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       COMPONENT: CALLOUT_CARD + NOTE_BOX  (slide-2)
+  ════════════════════════════════════════ -->
+  <section id="slide-2" class="slide">
+    <div class="max-w-4xl mx-auto px-8 w-full">
+
+      <!-- SECTION_HEADER -->
+      <div class="flex items-center gap-3 mb-10" data-reveal>
+        <span class="section-badge text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">03</span>
+        <h2 class="text-3xl font-bold">本週<span class="text-gradient">摘要</span></h2>
+      </div>
+
+      <!-- COMPONENT: CALLOUT_CARD -->
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden mb-6" data-reveal>
+        <!-- top bar -->
+        <div class="callout-top-bar h-1 w-full"></div>
+        <div class="p-7">
+          <!-- badge -->
+          <div class="mb-5">
+            <span class="bg-amber-500/20 text-amber-300 text-xs font-semibold px-3 py-1 rounded-full tracking-wide uppercase">本週進展</span>
+          </div>
+          <!-- list -->
+          <ul class="space-y-4 text-slate-300">
+            <li class="flex gap-3">
+              <span class="text-amber-400 mt-0.5 flex-shrink-0">●</span>
+              <div>
+                <span class="text-white font-semibold">API 閘道重構完成</span>
+                <span class="text-slate-400 ml-2 text-sm">—</span>
+                <span class="text-slate-400 text-sm"> 已合併至 main，延遲降低 34%，覆蓋測試達 91%</span>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-amber-400 mt-0.5 flex-shrink-0">●</span>
+              <div>
+                <span class="text-white font-semibold">資料庫慢查詢優化</span>
+                <span class="text-slate-400 ml-2 text-sm">—</span>
+                <span class="text-slate-400 text-sm"> 找出 3 支高頻 SQL 並加索引，平均查詢從 420ms 降至 28ms</span>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-amber-400 mt-0.5 flex-shrink-0">●</span>
+              <div>
+                <span class="text-white font-semibold">告警系統串接完成</span>
+                <span class="text-slate-400 ml-2 text-sm">—</span>
+                <span class="text-slate-400 text-sm"> Slack + PagerDuty 雙通道，週三已完成演練</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- COMPONENT: NOTE_BOX (WARN) -->
+      <div class="rounded-xl border border-amber-400/40 bg-amber-500/5 px-6 py-4 flex gap-4" data-reveal>
+        <div class="text-amber-400 flex-shrink-0 mt-0.5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-amber-300 font-semibold text-sm mb-1">注意事項</p>
+          <p class="text-slate-400 text-sm leading-relaxed">下週一 02:00–04:00 有計畫性維護，屆時服務將短暫中斷。請提前通知相關團隊，並確認 rollback plan 已就緒。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       COMPONENT: CHECKLIST  (slide-3)
+  ════════════════════════════════════════ -->
+  <section id="slide-3" class="slide">
+    <div class="max-w-4xl mx-auto px-8 w-full">
+
+      <!-- SECTION_HEADER -->
+      <div class="flex items-center gap-3 mb-4" data-reveal>
+        <span class="section-badge text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">04</span>
+        <h2 class="text-3xl font-bold">行動<span class="text-gradient">清單</span></h2>
+      </div>
+
+      <!-- progress -->
+      <div class="mb-8" data-reveal data-progress="checklist">
+        <div class="flex justify-between items-center mb-2 text-sm">
+          <span class="text-slate-500">完成進度</span>
+          <span class="text-amber-400 font-semibold tabular-nums" x-text="`${doneCount} / ${todos.length}`"></span>
+        </div>
+        <div class="h-1.5 rounded-full bg-slate-800">
+          <div class="checklist-progress-fill h-full rounded-full" :style="`width: ${todos.length ? (doneCount / todos.length) * 100 : 0}%`"></div>
+        </div>
+      </div>
+
+      <!-- todo list -->
+      <div class="space-y-3">
+        <template x-for="todo in todos" :key="todo.id">
+          <div class="todo-item flex items-start gap-4 rounded-xl border p-5 transition-colors cursor-pointer"
+               :class="todo.done ? 'border-slate-800/60 bg-slate-900/30' : 'border-slate-800 bg-slate-900/60'"
+               data-reveal
+               @click="toggleTodo(todo.id)">
+            <input type="checkbox" :checked="todo.done" @click.stop="toggleTodo(todo.id)" />
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold transition-colors"
+                 :class="todo.done ? 'line-through text-slate-600' : 'text-white'"
+                 x-text="todo.title"></p>
+              <p class="text-sm mt-0.5"
+                 :class="todo.done ? 'text-slate-700' : 'text-slate-500'"
+                 x-text="todo.desc"></p>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 mt-0.5"
+                  :class="todo.done
+                    ? 'bg-emerald-500/20 text-emerald-400'
+                    : 'bg-slate-800 text-slate-500'"
+                  x-text="todo.done ? '✓ 完成' : todo.tag">
+            </span>
+          </div>
+        </template>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    function page() {
+      return {
+        activeSlide: 0,
+        slides: [
+          { label: '封面' },
+          { label: '重點數據' },
+          { label: '本週摘要' },
+          { label: '行動清單' },
+        ],
+        scrollProgress: 0,
+        progressVisible: false,
+        todos: [
+          { id: 1, title: '完成 Redis 叢集遷移規劃', desc: '評估資料量與遷移視窗，產出操作手冊', tag: '進行中', done: false },
+          { id: 2, title: '審查 MR !#284 — 報表模組重構', desc: '確認 SQL injection 防護與測試覆蓋率', tag: '待處理', done: false },
+          { id: 3, title: '更新 staging 環境設定', desc: '對齊 production config，包含 feature flag 清單', tag: '本週', done: true },
+          { id: 4, title: '寄送 Q2 技術債清單給 PM', desc: '整理優先序並估算工時，轉入下季規劃', tag: '本週', done: true },
+        ],
+
+        get doneCount() {
+          return this.todos.filter(t => t.done).length;
+        },
+
+        toggleTodo(id) {
+          const todo = this.todos.find(t => t.id === id);
+          if (todo) todo.done = !todo.done;
+        },
+
+        animateCounter(el) {
+          const target = parseFloat(el.dataset.value);
+          const format = el.dataset.format || 'plain';
+          const suffix = el.dataset.suffix || '';
+          const display = el.querySelector('.counter-display');
+          if (!display) return;
+
+          const duration = 1200;
+          const start = performance.now();
+
+          const tick = (now) => {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = target * eased;
+            display.textContent = this.formatCounter(current, format) + suffix;
+            if (progress < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        },
+
+        formatCounter(v, format) {
+          if (format === 'decimal') return v.toFixed(1);
+          return Math.round(v).toLocaleString();
+        },
+
+        init() {
+          // Scroll progress
+          window.addEventListener('scroll', () => {
+            const el = document.documentElement;
+            const scrollTop = el.scrollTop || document.body.scrollTop;
+            const scrollHeight = el.scrollHeight - el.clientHeight;
+            this.scrollProgress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+          }, { passive: true });
+
+          // Slide IntersectionObserver
+          const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const id = entry.target.id; // e.g. "slide-2"
+                const idx = parseInt(id.replace('slide-', ''));
+                if (!isNaN(idx)) this.activeSlide = idx;
+              }
+            });
+          }, { rootMargin: '-40% 0px -40% 0px' });
+
+          document.querySelectorAll('.slide').forEach(el => slideObserver.observe(el));
+
+          // Reveal IntersectionObserver
+          const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                // Trigger counter if applicable
+                if (entry.target.hasAttribute('data-counter')) {
+                  this.animateCounter(entry.target);
+                }
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          }, { rootMargin: '-10% 0px -10% 0px' });
+
+          document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+        },
+      };
+    }
+  </script>
+
+</body>
+</html>

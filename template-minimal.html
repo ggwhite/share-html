@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>minimal template</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: #0b1020;
+      color: #cbd5e1;
+    }
+    [x-cloak] { display: none !important; }
+    [data-reveal] { opacity: 0; transform: translateY(8px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      [data-reveal] { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <div x-data="page()" class="max-w-2xl mx-auto px-6 py-16 space-y-16">
+
+    <!-- COMPONENT: HERO -->
+    <section data-reveal>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-700 bg-slate-800/60 text-slate-300 text-xs">
+        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+        <span>技術評估報告 · 2026-06-30</span>
+      </div>
+      <h1 class="mt-6 text-4xl font-bold leading-tight text-slate-100">
+        後端框架選型<br/>評估報告
+      </h1>
+      <p class="mt-5 text-base text-slate-400 leading-relaxed">
+        針對新服務架構的框架選型，本報告從效能、生態、維護成本三個維度進行分析，並提供明確的建議方向。
+      </p>
+      <div class="mt-6 flex items-center gap-3 text-sm text-slate-500">
+        <span>@white</span>
+        <span>·</span>
+        <span>內部技術文件</span>
+        <span>·</span>
+        <span>v1</span>
+      </div>
+    </section>
+    <!-- /COMPONENT: HERO -->
+
+    <section class="space-y-6" data-reveal>
+
+      <!-- COMPONENT: SECTION_HEADER -->
+      <header class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-slate-700 flex items-center justify-center text-slate-200 font-bold text-sm">1</div>
+        <div>
+          <h2 class="text-2xl font-bold text-slate-100">背景與目標</h2>
+          <p class="text-sm text-slate-400 mt-1">說明為何發起本次選型，以及需要滿足的核心需求。</p>
+        </div>
+      </header>
+      <!-- /COMPONENT: SECTION_HEADER -->
+
+      <!-- COMPONENT: CALLOUT_CARD -->
+      <div class="rounded-xl overflow-hidden border border-slate-700/60">
+        <div class="h-1 bg-slate-600"></div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-xs px-2 py-0.5 rounded-full bg-slate-700 text-slate-300 font-medium">核心需求</span>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-100 mb-2">高並發 API 服務</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            目標系統需支援每秒萬級請求，P99 延遲控制在 50ms 以內。同時需要完整的可觀測性支援（tracing、metrics、logging），以及與現有 Go 微服務生態的互通性。
+          </p>
+        </div>
+      </div>
+      <!-- /COMPONENT: CALLOUT_CARD -->
+
+    </section>
+
+    <section class="space-y-6" data-reveal>
+
+      <!-- COMPONENT: SECTION_HEADER -->
+      <header class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-slate-700 flex items-center justify-center text-slate-200 font-bold text-sm">2</div>
+        <div>
+          <h2 class="text-2xl font-bold text-slate-100">方案比較</h2>
+          <p class="text-sm text-slate-400 mt-1">針對三個候選方案進行多維度量化對比。</p>
+        </div>
+      </header>
+      <!-- /COMPONENT: SECTION_HEADER -->
+
+      <!-- COMPONENT: COMPARISON_TABLE -->
+      <div class="rounded-xl border border-slate-700/60 overflow-hidden text-sm">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-slate-700/60 text-left">
+              <th class="px-4 py-3 text-slate-400 font-medium">功能 / 指標</th>
+              <th class="px-4 py-3 text-slate-400 font-medium">方案 A — Gin</th>
+              <th class="px-4 py-3 text-slate-200 font-semibold bg-slate-500/5">方案 B — Fiber ✦</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700/40">
+            <tr>
+              <td class="px-4 py-3 text-slate-400">RPS（單核）</td>
+              <td class="px-4 py-3 text-slate-300">~85,000</td>
+              <td class="px-4 py-3 text-slate-200 bg-slate-500/5">~140,000</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 text-slate-400">記憶體佔用</td>
+              <td class="px-4 py-3 text-slate-300">中</td>
+              <td class="px-4 py-3 text-slate-200 bg-slate-500/5">低（零分配路由）</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 text-slate-400">生態成熟度</td>
+              <td class="px-4 py-3 text-slate-300">高，middleware 豐富</td>
+              <td class="px-4 py-3 text-slate-200 bg-slate-500/5">中，快速成長中</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 text-slate-400">net/http 相容</td>
+              <td class="px-4 py-3 text-slate-300">完全相容</td>
+              <td class="px-4 py-3 text-slate-200 bg-slate-500/5">部分相容（fasthttp）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- /COMPONENT: COMPARISON_TABLE -->
+
+    </section>
+
+    <section class="space-y-4" data-reveal>
+
+      <!-- COMPONENT: NOTE_BOX type=INFO -->
+      <div class="rounded-lg border-l-2 border-cyan-400 bg-cyan-500/5 px-4 py-3.5 flex gap-3">
+        <span class="flex-shrink-0 mt-0.5 text-xs font-semibold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 self-start">INFO</span>
+        <p class="text-sm text-slate-300 leading-relaxed">Fiber v3 已進入 RC 階段，net/http 相容層在新版本中有顯著改善，可於下季重新評估。</p>
+      </div>
+      <!-- /COMPONENT: NOTE_BOX -->
+
+      <!-- COMPONENT: NOTE_BOX type=WARN -->
+      <div class="rounded-lg border-l-2 border-amber-400 bg-amber-500/5 px-4 py-3.5 flex gap-3">
+        <span class="flex-shrink-0 mt-0.5 text-xs font-semibold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 self-start">WARN</span>
+        <p class="text-sm text-slate-300 leading-relaxed">fasthttp 的 RequestCtx 並非 context.Context，既有 middleware 若直接移植需逐一驗證相容性。</p>
+      </div>
+      <!-- /COMPONENT: NOTE_BOX -->
+
+      <!-- COMPONENT: NOTE_BOX type=OK -->
+      <div class="rounded-lg border-l-2 border-emerald-400 bg-emerald-500/5 px-4 py-3.5 flex gap-3">
+        <span class="flex-shrink-0 mt-0.5 text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 self-start">OK</span>
+        <p class="text-sm text-slate-300 leading-relaxed">建議採用 Gin 作為本期主力框架，等 Fiber v3 GA 後於新服務試點，成熟後再逐步遷移。</p>
+      </div>
+      <!-- /COMPONENT: NOTE_BOX -->
+
+      <!-- COMPONENT: NOTE_BOX type=DANGER -->
+      <div class="rounded-lg border-l-2 border-red-400 bg-red-500/5 px-4 py-3.5 flex gap-3">
+        <span class="flex-shrink-0 mt-0.5 text-xs font-semibold px-2 py-0.5 rounded bg-red-500/20 text-red-300 self-start">DANGER</span>
+        <p class="text-sm text-slate-300 leading-relaxed">請勿在本季將任何已上線服務切換至 Fiber，fasthttp 的 goroutine 洩漏問題在高負載下尚未完全排除。</p>
+      </div>
+      <!-- /COMPONENT: NOTE_BOX -->
+
+    </section>
+
+  </div>
+
+  <script>
+    function page() {
+      return {
+        init() {
+          const mo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (mo) return;
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                observer.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.1 });
+          document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+        }
+      };
+    }
+  </script>
+
+</body>
+</html>

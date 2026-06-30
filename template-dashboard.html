@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>系統監控儀表板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(34, 211, 238, 0.06) 0%, transparent 60%), #0b1020;
+      min-height: 100vh;
+      color: #e2e8f0;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    [data-reveal].revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body x-data="page()" @scroll.window="scrollProgress = window.scrollY">
+
+  <!-- COMPONENT: TOP_BAR -->
+  <div class="sticky top-0 z-50 border-b border-slate-800/70 bg-slate-950/85 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <!-- Title row -->
+      <div class="flex items-center justify-between pt-4 pb-2">
+        <h1 class="text-2xl font-bold text-white tracking-tight">系統監控儀表板</h1>
+        <span class="text-xs text-slate-500">最後更新：2026-06-30 14:32:00</span>
+      </div>
+
+      <!-- COMPONENT: TAB_BAR -->
+      <div class="flex gap-1 -mb-px">
+        <template x-for="tab in tabs" :key="tab.id">
+          <button
+            @click="switchTab(tab.id)"
+            class="px-5 py-3 text-sm font-medium border-b-2 rounded-t transition-all duration-150"
+            :class="activeTab === tab.id
+              ? 'text-cyan-300 border-cyan-400 bg-slate-900/60'
+              : 'text-slate-400 border-transparent hover:text-slate-200'"
+            x-text="tab.label"
+          ></button>
+        </template>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-6xl mx-auto px-6 pt-6 pb-24">
+
+    <!-- ================================ -->
+    <!-- TAB: 概覽 overview               -->
+    <!-- ================================ -->
+    <div
+      x-show="activeTab === 'overview'"
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0 translate-y-2"
+      x-transition:enter-end="opacity-100 translate-y-0"
+    >
+
+      <!-- COMPONENT: STATS_ROW -->
+      <div class="grid grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5" data-reveal>
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">請求數</div>
+          <div id="stat-requests" class="text-4xl font-bold text-cyan-400">1240</div>
+          <div class="text-xs text-slate-500 mt-2">過去 1 小時</div>
+        </div>
+
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5" data-reveal style="transition-delay: 60ms">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">p99 延遲</div>
+          <div id="stat-latency" class="text-4xl font-bold text-emerald-400">380ms</div>
+          <div class="text-xs text-slate-500 mt-2">毫秒</div>
+        </div>
+
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5" data-reveal style="transition-delay: 120ms">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">錯誤率</div>
+          <div id="stat-error" class="text-4xl font-bold text-amber-400">0.12%</div>
+          <div class="text-xs text-slate-500 mt-2">即時</div>
+        </div>
+
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5" data-reveal style="transition-delay: 180ms">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">可用率</div>
+          <div id="stat-uptime" class="text-4xl font-bold text-red-400">99.8%</div>
+          <div class="text-xs text-slate-500 mt-2">30 天</div>
+        </div>
+
+      </div>
+
+      <!-- COMPONENT: METRIC_TREND (overview, 3 cols, sparkline h-12) -->
+      <div class="grid grid-cols-3 gap-4">
+        <template x-for="(m, i) in metricTrends.slice(0, 3)" :key="i">
+          <div
+            class="bg-slate-900/60 border border-slate-800 rounded-xl p-5"
+            data-reveal
+            :style="`transition-delay: ${240 + i * 80}ms`"
+          >
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <div class="text-xs text-slate-500 uppercase tracking-widest mb-1" x-text="m.label"></div>
+                <div class="text-3xl font-bold text-white" x-text="m.value + m.suffix"></div>
+              </div>
+              <span
+                class="text-xs font-semibold px-2 py-1 rounded-full"
+                :class="m.delta >= 0 ? 'text-emerald-400 bg-emerald-400/10' : 'text-red-400 bg-red-400/10'"
+                x-text="(m.delta >= 0 ? '+' : '') + m.delta + '%'"
+              ></span>
+            </div>
+            <div class="h-12">
+              <canvas :id="`spark-ov-${i}`"></canvas>
+            </div>
+          </div>
+        </template>
+      </div>
+
+    </div>
+
+    <!-- ================================ -->
+    <!-- TAB: 細節 detail                 -->
+    <!-- ================================ -->
+    <div
+      x-show="activeTab === 'detail'"
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0 translate-y-2"
+      x-transition:enter-end="opacity-100 translate-y-0"
+    >
+      <div class="grid gap-6" style="grid-template-columns: 1fr 360px;">
+
+        <!-- COMPONENT: DATA_TABLE -->
+        <div>
+
+          <!-- Search + chip filters -->
+          <div class="flex flex-col sm:flex-row gap-3 mb-4">
+            <div class="relative flex-1">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              <input
+                x-model="itemSearch"
+                type="text"
+                placeholder="搜尋項目..."
+                class="w-full bg-slate-900/60 border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
+              />
+            </div>
+            <div class="flex gap-2 flex-wrap items-center">
+              <template x-for="f in filterOptions" :key="f">
+                <button
+                  @click="itemFilter = f"
+                  class="text-xs px-3 py-1.5 rounded-full border transition-all duration-150"
+                  :class="itemFilter === f
+                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50'
+                    : 'text-slate-400 border-slate-700 hover:text-slate-200 hover:border-slate-600'"
+                  x-text="f"
+                ></button>
+              </template>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-slate-800">
+                  <th class="text-left text-xs text-slate-500 font-medium px-4 py-3 uppercase tracking-widest w-2/5">項目</th>
+                  <th class="text-left text-xs text-slate-500 font-medium px-4 py-3 uppercase tracking-widest">狀態</th>
+                  <th class="text-left text-xs text-slate-500 font-medium px-4 py-3 uppercase tracking-widest">數值</th>
+                  <th class="text-left text-xs text-slate-500 font-medium px-4 py-3 uppercase tracking-widest">時間</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template x-for="item in filteredItems" :key="item.id">
+                  <tr class="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
+                    <td class="px-4 py-3 text-slate-200" x-text="item.name"></td>
+                    <td class="px-4 py-3">
+                      <span
+                        class="text-xs px-2 py-1 rounded-full font-medium border"
+                        :class="severityClass(item.severity)"
+                        x-text="item.severity"
+                      ></span>
+                    </td>
+                    <td class="px-4 py-3 text-slate-300 font-mono text-xs" x-text="item.value"></td>
+                    <td class="px-4 py-3 text-slate-500 text-xs" x-text="item.time"></td>
+                  </tr>
+                </template>
+                <tr x-show="filteredItems.length === 0">
+                  <td colspan="4" class="px-4 py-10 text-center text-slate-500 text-sm">沒有符合的項目</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-2 text-xs text-slate-600 text-right" x-text="`共 ${filteredItems.length} 筆`"></div>
+
+        </div>
+
+        <!-- COMPONENT: RADAR_CHART -->
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
+          <div class="text-sm font-medium text-slate-300 mb-3">系統健康雷達</div>
+
+          <!-- Custom legend -->
+          <div class="flex gap-5 mb-4 text-xs">
+            <template x-for="ds in radarDatasets" :key="ds.label">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full inline-block flex-shrink-0" :style="`background: ${ds.color}`"></span>
+                <span class="text-slate-400" x-text="ds.label"></span>
+              </div>
+            </template>
+          </div>
+
+          <div class="relative flex items-center justify-center" style="height: 280px;">
+            <canvas id="radarChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================================ -->
+    <!-- TAB: 趨勢 trend                  -->
+    <!-- ================================ -->
+    <div
+      x-show="activeTab === 'trend'"
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0 translate-y-2"
+      x-transition:enter-end="opacity-100 translate-y-0"
+    >
+
+      <!-- COMPONENT: METRIC_TREND (trend, 2 cols, sparkline h-32) -->
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <template x-for="(m, i) in metricTrends" :key="i">
+          <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
+            <div class="flex items-start justify-between mb-4">
+              <div>
+                <div class="text-xs text-slate-500 uppercase tracking-widest mb-1" x-text="m.label"></div>
+                <div class="text-3xl font-bold text-white" x-text="m.value + m.suffix"></div>
+              </div>
+              <span
+                class="text-xs font-semibold px-2 py-1 rounded-full"
+                :class="m.delta >= 0 ? 'text-emerald-400 bg-emerald-400/10' : 'text-red-400 bg-red-400/10'"
+                x-text="(m.delta >= 0 ? '+' : '') + m.delta + '%'"
+              ></span>
+            </div>
+            <div class="h-32">
+              <canvas :id="`spark-tr-${i}`"></canvas>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- COMPONENT: COMPARISON_TABLE -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-800">
+          <div class="text-sm font-semibold text-slate-200">方案比較</div>
+          <div class="text-xs text-slate-500 mt-0.5">選擇最適合您需求的方案</div>
+        </div>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-slate-800">
+              <th class="text-left text-xs text-slate-500 font-medium px-5 py-3 uppercase tracking-widest">功能</th>
+              <th class="text-center text-xs text-slate-500 font-medium px-4 py-3 uppercase tracking-widest">基礎版</th>
+              <th class="text-center text-xs text-cyan-400 font-semibold px-4 py-3 uppercase tracking-widest bg-cyan-500/5">專業版 ★</th>
+              <th class="text-center text-xs text-slate-500 font-medium px-4 py-3 uppercase tracking-widest">企業版</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
+              <td class="px-5 py-3.5 text-slate-300">即時監控</td>
+              <td class="px-4 py-3.5 text-center text-slate-500 text-xs">5 分鐘</td>
+              <td class="px-4 py-3.5 text-center text-cyan-300 text-xs bg-cyan-500/5">1 分鐘</td>
+              <td class="px-4 py-3.5 text-center text-slate-300 text-xs">即時</td>
+            </tr>
+            <tr class="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
+              <td class="px-5 py-3.5 text-slate-300">告警通知</td>
+              <td class="px-4 py-3.5 text-center text-slate-500 text-xs">Email</td>
+              <td class="px-4 py-3.5 text-center text-cyan-300 text-xs bg-cyan-500/5">Email + Slack</td>
+              <td class="px-4 py-3.5 text-center text-slate-300 text-xs">全通道</td>
+            </tr>
+            <tr class="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
+              <td class="px-5 py-3.5 text-slate-300">資料保留</td>
+              <td class="px-4 py-3.5 text-center text-slate-500 text-xs">7 天</td>
+              <td class="px-4 py-3.5 text-center text-cyan-300 text-xs bg-cyan-500/5">90 天</td>
+              <td class="px-4 py-3.5 text-center text-slate-300 text-xs">無限</td>
+            </tr>
+            <tr class="hover:bg-slate-800/20 transition-colors">
+              <td class="px-5 py-3.5 text-slate-300">API 存取</td>
+              <td class="px-4 py-3.5 text-center">
+                <svg class="w-4 h-4 text-slate-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </td>
+              <td class="px-4 py-3.5 text-center bg-cyan-500/5">
+                <svg class="w-4 h-4 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </td>
+              <td class="px-4 py-3.5 text-center">
+                <svg class="w-4 h-4 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function page() {
+      return {
+
+        // ── Scroll (reserved) ──
+        scrollProgress: 0,
+
+        // ── Tabs ──
+        activeTab: 'overview',
+        tabs: [
+          { id: 'overview', label: '概覽' },
+          { id: 'detail',   label: '細節' },
+          { id: 'trend',    label: '趨勢' },
+        ],
+
+        switchTab(id) {
+          this.activeTab = id;
+          this.$nextTick(() => {
+            if (id === 'overview') {
+              this.triggerReveal();
+              this.animateCounters();
+              if (!this.ovSparkInited) this.initOverviewSparks();
+            }
+            if (id === 'detail') {
+              if (!this.radarInited) this.initRadar();
+            }
+            if (id === 'trend') {
+              if (!this.trendSparkInited) this.initTrendSparks();
+            }
+          });
+        },
+
+        // ── Counter animation ──
+        animateCounters() {
+          const counters = [
+            { id: 'stat-requests', target: 1240, suffix: '',    decimal: 0 },
+            { id: 'stat-latency',  target: 380,  suffix: 'ms',  decimal: 0 },
+            { id: 'stat-error',    target: 0.12, suffix: '%',   decimal: 2 },
+            { id: 'stat-uptime',   target: 99.8, suffix: '%',   decimal: 1 },
+          ];
+          const duration = 900;
+          counters.forEach(c => {
+            const el = document.getElementById(c.id);
+            if (!el) return;
+            const start = performance.now();
+            const tick = (now) => {
+              const t = Math.min((now - start) / duration, 1);
+              const ease = 1 - Math.pow(1 - t, 3);
+              el.textContent = (c.target * ease).toFixed(c.decimal) + c.suffix;
+              if (t < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+          });
+        },
+
+        formatCounter(val, suffix, decimal) {
+          return Number(val).toFixed(decimal || 0) + (suffix || '');
+        },
+
+        // ── Reveal animation ──
+        triggerReveal() {
+          document.querySelectorAll('[data-reveal]').forEach(el => {
+            el.classList.remove('revealed');
+          });
+          requestAnimationFrame(() => {
+            document.querySelectorAll('[data-reveal]').forEach(el => {
+              // Use existing transition-delay from inline style if set
+              el.classList.add('revealed');
+            });
+          });
+        },
+
+        // ── Items / filter ──
+        itemSearch: '',
+        itemFilter: '全部',
+        filterOptions: ['全部', '嚴重', '警告', '資訊', '通過'],
+
+        items: [
+          { id:  1, name: 'CPU 使用率',       severity: '嚴重', value: '94.2%',    time: '14:31:55' },
+          { id:  2, name: '記憶體洩漏偵測',   severity: '嚴重', value: '12.4 GB',  time: '14:30:12' },
+          { id:  3, name: 'Disk I/O',          severity: '警告', value: '820 MB/s', time: '14:28:40' },
+          { id:  4, name: '網路延遲',          severity: '警告', value: '142 ms',   time: '14:27:10' },
+          { id:  5, name: 'DB 連線數',         severity: '警告', value: '450/500',  time: '14:25:33' },
+          { id:  6, name: 'SSL 憑證到期',      severity: '資訊', value: '30 天',    time: '14:20:00' },
+          { id:  7, name: 'API Gateway',       severity: '通過', value: '99.9%',    time: '14:32:00' },
+          { id:  8, name: 'CDN 命中率',        severity: '通過', value: '92.4%',    time: '14:32:00' },
+          { id:  9, name: 'Cache 命中率',      severity: '通過', value: '88.1%',    time: '14:31:00' },
+          { id: 10, name: 'Load Balancer',     severity: '通過', value: 'healthy',  time: '14:32:00' },
+        ],
+
+        get filteredItems() {
+          return this.items.filter(item => {
+            const matchFilter = this.itemFilter === '全部' || item.severity === this.itemFilter;
+            const matchSearch = item.name.toLowerCase().includes(this.itemSearch.toLowerCase());
+            return matchFilter && matchSearch;
+          });
+        },
+
+        severityClass(severity) {
+          const map = {
+            '嚴重': 'bg-red-500/20 text-red-400 border-red-500/30',
+            '警告': 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+            '資訊': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+            '通過': 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+          };
+          return map[severity] || 'text-slate-400 border-slate-600';
+        },
+
+        // ── Metric trend data (4 items, overview uses first 3) ──
+        metricTrends: [
+          {
+            label: 'Requests / sec',
+            value: '20.7', suffix: ' rps', delta: 8.3,
+            color: '#22d3ee',
+            data: [12, 15, 13, 18, 16, 20, 19, 21, 18, 22, 20, 20.7],
+          },
+          {
+            label: 'p99 Latency',
+            value: '380', suffix: ' ms', delta: -5.2,
+            color: '#34d399',
+            data: [420, 415, 430, 400, 390, 410, 395, 385, 370, 390, 375, 380],
+          },
+          {
+            label: 'Error Rate',
+            value: '0.12', suffix: '%', delta: -12.5,
+            color: '#fbbf24',
+            data: [0.20, 0.18, 0.22, 0.17, 0.15, 0.19, 0.14, 0.13, 0.16, 0.12, 0.13, 0.12],
+          },
+          {
+            label: 'Throughput',
+            value: '4.2', suffix: ' GB/h', delta: 3.1,
+            color: '#a78bfa',
+            data: [3.5, 3.6, 3.8, 3.7, 3.9, 4.0, 3.8, 4.1, 4.0, 4.2, 4.1, 4.2],
+          },
+        ],
+
+        // ── Sparkline helpers ──
+        ovSparkInited: false,
+        trendSparkInited: false,
+
+        _sparkConfig(m) {
+          return {
+            type: 'line',
+            data: {
+              labels: m.data.map((_, i) => i),
+              datasets: [{
+                data: m.data,
+                borderColor: m.color,
+                backgroundColor: m.color + '1a',
+                borderWidth: 1.5,
+                pointRadius: 0,
+                tension: 0.35,
+                fill: true,
+              }],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              animation: { duration: 600 },
+              plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false },
+              },
+              scales: {
+                x: { display: false },
+                y: { display: false },
+              },
+            },
+          };
+        },
+
+        initOverviewSparks() {
+          this.ovSparkInited = true;
+          this.metricTrends.slice(0, 3).forEach((m, i) => {
+            const canvas = document.getElementById(`spark-ov-${i}`);
+            if (canvas) new Chart(canvas, this._sparkConfig(m));
+          });
+        },
+
+        initTrendSparks() {
+          this.trendSparkInited = true;
+          this.metricTrends.forEach((m, i) => {
+            const canvas = document.getElementById(`spark-tr-${i}`);
+            if (canvas) new Chart(canvas, this._sparkConfig(m));
+          });
+        },
+
+        // ── Radar ──
+        radarInited: false,
+        radarDatasets: [
+          { label: '本月', color: '#22d3ee' },
+          { label: '上月', color: '#f472b6' },
+        ],
+
+        initRadar() {
+          this.radarInited = true;
+          const canvas = document.getElementById('radarChart');
+          if (!canvas) return;
+          new Chart(canvas, {
+            type: 'radar',
+            data: {
+              labels: ['效能', '安全', '可用性', '可維護', '可觀測', '合規'],
+              datasets: [
+                {
+                  label: '本月',
+                  data: [88, 92, 99, 76, 84, 90],
+                  borderColor: '#22d3ee',
+                  backgroundColor: 'rgba(34,211,238,0.12)',
+                  borderWidth: 2,
+                  pointBackgroundColor: '#22d3ee',
+                  pointBorderColor: 'transparent',
+                  pointRadius: 3,
+                },
+                {
+                  label: '上月',
+                  data: [80, 85, 97, 70, 78, 88],
+                  borderColor: '#f472b6',
+                  backgroundColor: 'rgba(244,114,182,0.08)',
+                  borderWidth: 2,
+                  pointBackgroundColor: '#f472b6',
+                  pointBorderColor: 'transparent',
+                  pointRadius: 3,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              animation: { duration: 600 },
+              plugins: {
+                legend: { display: false },
+              },
+              scales: {
+                r: {
+                  min: 0,
+                  max: 100,
+                  ticks: {
+                    color: '#475569',
+                    backdropColor: 'transparent',
+                    stepSize: 25,
+                    font: { size: 10 },
+                  },
+                  grid: { color: 'rgba(148,163,184,0.12)' },
+                  angleLines: { color: 'rgba(148,163,184,0.12)' },
+                  pointLabels: {
+                    color: '#94a3b8',
+                    font: { size: 12 },
+                  },
+                },
+              },
+            },
+          });
+        },
+
+        // ── Alpine init ──
+        init() {
+          this.$nextTick(() => {
+            this.triggerReveal();
+            this.animateCounters();
+            this.initOverviewSparks();
+          });
+        },
+
+      };
+    }
+  </script>
+</body>
+</html>

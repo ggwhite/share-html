@@ -1,0 +1,103 @@
+<!-- EFFECT: METABALLS -->
+<canvas id="mb-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;image-rendering:pixelated;"></canvas>
+<script>
+(function(){
+  const canvas = document.getElementById('mb-canvas');
+  const ctx = canvas.getContext('2d');
+
+  const SCALE = 4;
+  const THRESHOLD = 1.0;
+
+  // full-screen CSS, low-res pixel buffer
+  canvas.style.width  = '100vw';
+  canvas.style.height = '100vh';
+
+  let cw, ch, rafId, paused = false;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let balls;
+
+  function initBalls(){
+    balls = [
+      {x: cw*0.3, y: ch*0.4, vx:  0.7*0.3, vy:  0.5*0.3, r: 80, c:[34,211,238]},
+      {x: cw*0.6, y: ch*0.3, vx: -0.5*0.3, vy:  0.8*0.3, r: 60, c:[167,139,250]},
+      {x: cw*0.5, y: ch*0.7, vx:  0.6*0.3, vy: -0.6*0.3, r: 70, c:[244,114,182]},
+      {x: cw*0.4, y: ch*0.5, vx: -0.4*0.3, vy: -0.7*0.3, r: 50, c:[52,211,153]},
+    ];
+  }
+
+  function resize(){
+    cw = canvas.width  = Math.ceil(window.innerWidth  / SCALE);
+    ch = canvas.height = Math.ceil(window.innerHeight / SCALE);
+    initBalls();
+  }
+
+  function updateBalls(){
+    for(const b of balls){
+      b.x += b.vx;
+      b.y += b.vy;
+      if(b.x < 0 || b.x > cw){ b.vx = -b.vx; b.x = Math.max(0, Math.min(cw, b.x)); }
+      if(b.y < 0 || b.y > ch){ b.vy = -b.vy; b.y = Math.max(0, Math.min(ch, b.y)); }
+    }
+  }
+
+  function step(){
+    updateBalls();
+
+    const img = ctx.createImageData(cw, ch);
+    const data = img.data;
+
+    for(let py = 0; py < ch; py++){
+      for(let px = 0; px < cw; px++){
+        let sum = 0;
+        let wr = 0, wg = 0, wb = 0;
+
+        for(const b of balls){
+          const dx = px - b.x;
+          const dy = py - b.y;
+          const r2 = b.r * b.r;
+          const d2 = dx*dx + dy*dy;
+          const contrib = r2 / (d2 + 1);
+          sum += contrib;
+          wr += b.c[0] * contrib;
+          wg += b.c[1] * contrib;
+          wb += b.c[2] * contrib;
+        }
+
+        if(sum > THRESHOLD){
+          const idx = (py * cw + px) * 4;
+          const alpha = Math.min(sum * 15, 40);
+          data[idx]   = wr / sum;
+          data[idx+1] = wg / sum;
+          data[idx+2] = wb / sum;
+          data[idx+3] = alpha;
+        }
+      }
+    }
+
+    ctx.putImageData(img, 0, 0);
+  }
+
+  function loop(){
+    if(!paused) step();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  if(reduced){
+    resize();
+    step();
+  } else {
+    resize();
+    loop();
+
+    document.addEventListener('visibilitychange', ()=>{
+      paused = document.hidden;
+    });
+
+    window.addEventListener('resize', ()=>{
+      resize();
+    });
+  }
+})();
+</script>
+<!-- /EFFECT: METABALLS -->

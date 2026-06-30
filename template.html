@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>share-html · editorial template</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(34, 211, 238, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 40% at 80% 100%, rgba(167, 139, 250, 0.06) 0%, transparent 60%),
+        #0b1020;
+      color: #e2e8f0;
+    }
+    [draggable="true"] { user-select: none; }
+    [x-cloak] { display: none !important; }
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    [data-reveal] { opacity: 0; transform: translateY(8px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      [data-reveal] { opacity: 1; transform: none; transition: none; }
+    }
+    .hljs { background: transparent !important; padding: 0 !important; }
+    .text-gradient {
+      background-image: linear-gradient(to right, #22d3ee, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <div x-data="page()" class="grid grid-cols-[260px_minmax(0,1fr)] max-w-6xl mx-auto px-6 pt-16 pb-24 gap-10">
+
+  <!-- COMPONENT: TOP_BAR -->
+  <div class="fixed top-0 left-0 right-0 h-[2px] z-50 bg-slate-800/50">
+    <div class="h-full bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-400"
+         :style="`width: ${scrollProgress}%`"></div>
+  </div>
+  <!-- /COMPONENT: TOP_BAR -->
+
+    <!-- COMPONENT: STICKY_TOC -->
+    <aside class="sticky top-12 self-start">
+      <div class="text-xs uppercase tracking-widest text-slate-500 mb-4">本頁導覽</div>
+      <nav class="space-y-1 text-sm">
+        <template x-for="item in toc" :key="item.id">
+          <a :href="'#' + item.id"
+             :class="activeSection === item.id
+               ? 'border-l-2 border-cyan-400 text-cyan-300 bg-slate-900/40'
+               : 'border-l-2 border-transparent text-slate-400 hover:text-slate-200'"
+             class="block px-3 py-2 transition-colors"
+             x-text="item.label"></a>
+        </template>
+      </nav>
+    </aside>
+    <!-- /COMPONENT: STICKY_TOC -->
+
+    <main class="min-w-0 max-w-3xl space-y-20">
+
+      <!-- COMPONENT: HERO -->
+      <section id="hero">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 text-xs">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+          <span>editorial template · 2026-05-11</span>
+        </div>
+        <h1 class="mt-6 text-5xl font-bold leading-tight">
+          share-html<br/>
+          <span class="text-gradient">editorial</span> 模版
+        </h1>
+        <p class="mt-6 text-lg text-slate-400 leading-relaxed">
+          給 Claude 用來產出研究報告、重點對照、進度看板等需要分享給別人讀的單檔 HTML。下方依序展示所有可用元件，套用時請挑用、不要保留示範文字。
+        </p>
+        <div class="mt-8 flex items-center gap-3 text-sm text-slate-500">
+          <span>@white</span>
+          <span>·</span>
+          <span>v2</span>
+          <span>·</span>
+          <span>單檔 self-contained</span>
+        </div>
+      </section>
+      <!-- /COMPONENT: HERO -->
+
+      <section id="section-1">
+        <!-- COMPONENT: SECTION_HEADER -->
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">1</div>
+          <div>
+            <h2 class="text-2xl font-bold">引言</h2>
+            <p class="text-sm text-slate-400 mt-1">為何 HTML 在 LLM 時代取代 Markdown 作為輸出格式。</p>
+          </div>
+        </header>
+        <!-- /COMPONENT: SECTION_HEADER -->
+
+        <!-- COMPONENT: QUOTE_BLOCK -->
+        <blockquote class="relative border-l-2 border-violet-400 bg-slate-900/40 rounded-r-lg px-6 py-5 mb-6">
+          <div class="absolute -top-2 left-3 text-5xl text-violet-400/50 font-serif leading-none select-none">&ldquo;</div>
+          <p class="text-lg italic text-slate-200 leading-relaxed pl-6">
+            Markdown is a report. HTML is an interface.<br/>
+            <span class="text-slate-300">— Markdown 是一份報告，HTML 卻是一個讓人繼續工作的介面。</span>
+          </p>
+          <p class="text-sm text-slate-500 mt-4 pl-6">— Thariq Shihipar · Anthropic Claude Code 團隊</p>
+        </blockquote>
+        <!-- /COMPONENT: QUOTE_BLOCK -->
+
+        <p class="text-slate-300 leading-relaxed">
+          當 LLM 一次能產出數萬字結構化內容，過去選擇 Markdown 的理由（短、輕、純文字）已不再是瓶頸。把輸出做成「能用」而非「能讀」，是這個時代的合理升級——HTML 支援互動、狀態追蹤、即時搜尋與篩選，這是純文字格式無法企及的。
+        </p>
+      </section>
+      <section id="section-2">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">2</div>
+          <div>
+            <h2 class="text-2xl font-bold">能力對照</h2>
+            <p class="text-sm text-slate-400 mt-1">兩種格式的根本差異——「動 vs 不動」。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: CALLOUT_CARD -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="rounded-lg bg-slate-900/60 border border-slate-800 overflow-hidden">
+            <div class="h-1 bg-gradient-to-r from-red-400 to-pink-400"></div>
+            <div class="p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs px-2 py-0.5 rounded bg-red-500/20 text-red-300 font-mono">MD</span>
+                <h3 class="text-base font-semibold text-red-300">Markdown 的限制</h3>
+              </div>
+              <ul class="space-y-2 text-sm text-slate-300">
+                <li class="flex gap-2"><span class="text-red-400">·</span><span>純粹線性閱讀，無法折疊或篩選</span></li>
+                <li class="flex gap-2"><span class="text-red-400">·</span><span>無法嵌入互動 widget、SVG 圖表</span></li>
+                <li class="flex gap-2"><span class="text-red-400">·</span><span>長報告需要人工捲動、複製、剪貼</span></li>
+                <li class="flex gap-2"><span class="text-red-400">·</span><span>沒有狀態（待辦／已完成／優先級）</span></li>
+                <li class="flex gap-2"><span class="text-red-400">·</span><span>無法搜尋、無法即時更新計算</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="rounded-lg bg-slate-900/60 border border-slate-800 overflow-hidden">
+            <div class="h-1 bg-gradient-to-r from-emerald-400 to-cyan-400"></div>
+            <div class="p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">{ }</span>
+                <h3 class="text-base font-semibold text-emerald-300">HTML 帶來的能力</h3>
+              </div>
+              <ul class="space-y-2 text-sm text-slate-300">
+                <li class="flex gap-2"><span class="text-emerald-400">·</span><span>SVG 圖表、互動 widget、頁內導覽</span></li>
+                <li class="flex gap-2"><span class="text-emerald-400">·</span><span>可折疊、可篩選、可排序</span></li>
+                <li class="flex gap-2"><span class="text-emerald-400">·</span><span>狀態徽章、優先級顏色、進度條</span></li>
+                <li class="flex gap-2"><span class="text-emerald-400">·</span><span>同份輸出既是檢視也是工作面板</span></li>
+                <li class="flex gap-2"><span class="text-emerald-400">·</span><span>可加入 JS 計算、即時試算、模擬</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- /COMPONENT: CALLOUT_CARD -->
+      </section>
+
+      <section id="section-3">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">3</div>
+          <div>
+            <h2 class="text-2xl font-bold">數據</h2>
+            <p class="text-sm text-slate-400 mt-1">嚴重程度分布 + 可篩選的明細表。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: STATS_ROW -->
+        <!--
+          整 row 加 data-reveal，scroll 進場時 fade-in；
+          每個數字 div 加 data-counter="<target>"，textContent 初始 "0"，進場後 count-up 1.2s。
+          整數預設用 int；要逗號用 data-format="comma"，百分比 "percent"，毫秒 "ms"。
+        -->
+        <div class="grid grid-cols-4 gap-3 mb-6" data-reveal>
+          <div class="rounded-lg bg-slate-900/60 border border-slate-800 px-4 py-5 text-center">
+            <div class="text-4xl font-bold text-red-400" data-counter="2">0</div>
+            <div class="text-xs text-slate-500 mt-1 uppercase tracking-wide">嚴重</div>
+          </div>
+          <div class="rounded-lg bg-slate-900/60 border border-slate-800 px-4 py-5 text-center">
+            <div class="text-4xl font-bold text-amber-400" data-counter="3">0</div>
+            <div class="text-xs text-slate-500 mt-1 uppercase tracking-wide">警告</div>
+          </div>
+          <div class="rounded-lg bg-slate-900/60 border border-slate-800 px-4 py-5 text-center">
+            <div class="text-4xl font-bold text-cyan-400" data-counter="1">0</div>
+            <div class="text-xs text-slate-500 mt-1 uppercase tracking-wide">資訊</div>
+          </div>
+          <div class="rounded-lg bg-slate-900/60 border border-slate-800 px-4 py-5 text-center">
+            <div class="text-4xl font-bold text-emerald-400" data-counter="4">0</div>
+            <div class="text-xs text-slate-500 mt-1 uppercase tracking-wide">通過</div>
+          </div>
+        </div>
+        <!-- /COMPONENT: STATS_ROW -->
+
+        <!-- COMPONENT: DATA_TABLE -->
+        <div class="rounded-lg bg-slate-900/60 border border-slate-800 p-5">
+          <div class="flex items-center gap-3 mb-4">
+            <input x-model="itemSearch" type="text" placeholder="搜尋檔案 / 描述..."
+                   class="flex-1 bg-slate-950/60 border border-slate-800 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-cyan-500">
+            <div class="flex gap-1 text-xs">
+              <template x-for="f in ['全部','嚴重','警告','資訊','通過']" :key="f">
+                <button @click="itemFilter = f"
+                        :class="itemFilter === f
+                          ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50'
+                          : 'bg-slate-800/40 text-slate-400 border-slate-700 hover:text-slate-200'"
+                        class="px-3 py-1 rounded border transition-colors"
+                        x-text="f"></button>
+              </template>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <template x-for="item in filteredItems" :key="item.id">
+              <div class="flex items-start gap-3 p-3 rounded bg-slate-950/40 border border-slate-800 hover:border-slate-700 transition-colors">
+                <span class="text-xs px-2 py-0.5 rounded font-mono flex-shrink-0 mt-0.5"
+                      :class="severityClass(item.severity)"
+                      x-text="item.severity"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2 text-sm">
+                    <code class="text-cyan-300 font-mono text-xs" x-text="item.location"></code>
+                    <span class="text-slate-200 font-medium" x-text="item.title"></span>
+                  </div>
+                  <p class="text-xs text-slate-400 mt-1" x-text="item.desc"></p>
+                </div>
+              </div>
+            </template>
+            <p x-show="filteredItems.length === 0" class="text-center text-slate-500 text-sm py-6">沒有符合條件的項目</p>
+          </div>
+        </div>
+        <!-- /COMPONENT: DATA_TABLE -->
+      </section>
+
+      <section id="section-radar">
+        <!-- COMPONENT: SECTION_HEADER -->
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">4</div>
+          <div>
+            <h2 class="text-2xl font-bold">能力雷達圖</h2>
+            <p class="text-sm text-slate-400 mt-1">六個維度的量化比較。HTML 在多數工作場景全面領先。</p>
+          </div>
+        </header>
+        <!-- /COMPONENT: SECTION_HEADER -->
+
+        <!-- COMPONENT: RADAR_CHART -->
+        <!--
+          使用 Chart.js（CDN）。建構在 Alpine init() → initRadar()。
+          dataset 從 style rules 主色挑：cyan-400 #22d3ee / pink-400 #f472b6 / violet-400 #a78bfa / emerald-400 #34d399。
+          多組 dataset 時兩兩之間建議用對比色（cyan vs pink）。
+          右側 legend 自己畫圓點 + label，不啟用 Chart.js 內建 legend，配色才能跟卡片風格一致。
+        -->
+        <div class="rounded-lg bg-slate-900/60 border border-slate-800 p-5" data-reveal data-chart="radar">
+          <div class="grid grid-cols-[1fr_180px] gap-6 items-center">
+            <div class="relative">
+              <canvas id="radarChart"></canvas>
+            </div>
+            <div class="space-y-4">
+              <ul class="space-y-2.5 text-sm">
+                <template x-for="d in radarDatasets" :key="d.label">
+                  <li class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full" :style="`background-color: ${d.color}`"></span>
+                    <span class="text-slate-200" x-text="d.label"></span>
+                  </li>
+                </template>
+              </ul>
+              <p class="text-xs text-slate-400 leading-relaxed pt-3 border-t border-slate-800">
+                在「可讀性」上兩者接近，但只要任務牽涉互動、狀態、分享、視覺，HTML 的覆蓋面顯著更廣。
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- /COMPONENT: RADAR_CHART -->
+      </section>
+
+      <section id="section-4">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">5</div>
+          <div>
+            <h2 class="text-2xl font-bold">工作流</h2>
+            <p class="text-sm text-slate-400 mt-1">把報告的「下一步」直接變成可拖拉的 Kanban。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: KANBAN -->
+        <div class="grid grid-cols-3 gap-3">
+          <template x-for="col in ['待辦', '進行中', '已完成']" :key="col">
+            <div class="rounded-lg bg-slate-900/40 border border-slate-800 p-3"
+                 @dragover.prevent
+                 @drop="onDrop(col)">
+              <div class="flex items-center justify-between mb-3 px-1">
+                <h3 class="text-xs font-semibold uppercase tracking-wider"
+                    :class="{
+                      '待辦':   'text-slate-300',
+                      '進行中': 'text-cyan-300',
+                      '已完成': 'text-emerald-300',
+                    }[col]"
+                    x-text="col"></h3>
+                <span class="text-xs text-slate-500" x-text="kanbanCards[col].length"></span>
+              </div>
+              <div class="space-y-2">
+                <template x-for="card in kanbanCards[col]" :key="card.id">
+                  <div class="bg-slate-950/60 rounded p-3 border border-slate-800 hover:border-cyan-500/50 cursor-move transition-colors"
+                       draggable="true"
+                       @dragstart="onDragStart(card.id, col)">
+                    <div class="flex items-center gap-2 mb-1.5 text-xs">
+                      <span class="px-1.5 py-0.5 rounded font-mono"
+                            :class="priorityClass(card.priority)"
+                            x-text="card.priority"></span>
+                    </div>
+                    <div class="text-sm text-slate-200" x-text="card.title"></div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+        <!-- /COMPONENT: KANBAN -->
+      </section>
+
+      <section id="section-screenshots">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">★</div>
+          <div>
+            <h2 class="text-2xl font-bold">操作截圖</h2>
+            <p class="text-sm text-slate-400 mt-1">點圖可放大，看實際後台介面對應到哪一步。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: IMG_GALLERY -->
+        <!--
+          兩種樣板：
+          (1) 含 STEP markers + step list（適合後台操作流程示意）
+          (2) 純圖 + caption（適合架構圖、狀態示意，不需標記）
+          點圖會把整個 figure 變全螢幕 overlay，markers 與 step list 都跟著放大；按 Esc 或點 backdrop 退出。
+          markers 用 % 座標（{ x, y, label }），所以圖縮放後仍對齊。
+        -->
+        <div class="grid grid-cols-1 gap-4">
+
+          <!-- 樣板 (1)：帶 STEP markers -->
+          <figure :class="zoomedFigure === 'fig-1'
+            ? 'fixed inset-0 z-50 bg-slate-950/95 overflow-auto p-6 cursor-zoom-out'
+            : 'rounded-lg overflow-hidden bg-slate-900/60 border border-slate-800'"
+            @click="if (zoomedFigure === 'fig-1') zoomedFigure = null"
+            @keydown.escape.window="zoomedFigure = null">
+            <div @click.stop
+                 :class="zoomedFigure === 'fig-1' ? 'max-w-7xl mx-auto bg-slate-900 rounded-lg overflow-hidden' : ''">
+              <div class="relative">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
+                     alt="後台示意圖 1"
+                     class="block w-full cursor-zoom-in"
+                     @click.stop="zoomedFigure = (zoomedFigure === 'fig-1' ? null : 'fig-1')">
+                <!-- STEP marker 範例：根據實際截圖內容調整 left/top % 與描述 -->
+                <button @click.stop @mouseenter="hoveredStep = 1" @mouseleave="hoveredStep = null"
+                        class="absolute -ml-3.5 -mt-3.5 w-7 h-7 rounded-full bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 text-slate-900 font-bold text-sm flex items-center justify-center shadow-lg ring-2 ring-slate-950 hover:scale-110 transition-transform"
+                        style="left: 20%; top: 30%;">1</button>
+                <button @click.stop @mouseenter="hoveredStep = 2" @mouseleave="hoveredStep = null"
+                        class="absolute -ml-3.5 -mt-3.5 w-7 h-7 rounded-full bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 text-slate-900 font-bold text-sm flex items-center justify-center shadow-lg ring-2 ring-slate-950 hover:scale-110 transition-transform"
+                        style="left: 50%; top: 50%;">2</button>
+              </div>
+              <ol class="px-4 pt-3 pb-2 space-y-1 text-sm">
+                <li class="flex gap-2 px-2 py-1 rounded transition-colors"
+                    :class="hoveredStep === 1 ? 'bg-cyan-500/15 text-cyan-200' : 'text-slate-300'">
+                  <span class="font-mono text-xs text-slate-500 mt-0.5">1</span>
+                  <span>步驟 1 描述（替換）</span>
+                </li>
+                <li class="flex gap-2 px-2 py-1 rounded transition-colors"
+                    :class="hoveredStep === 2 ? 'bg-cyan-500/15 text-cyan-200' : 'text-slate-300'">
+                  <span class="font-mono text-xs text-slate-500 mt-0.5">2</span>
+                  <span>步驟 2 描述（替換）</span>
+                </li>
+              </ol>
+              <figcaption class="px-4 pb-3 text-xs text-slate-500 border-t border-slate-800 pt-2 mt-1">圖 1：替換為實際 caption</figcaption>
+            </div>
+          </figure>
+
+          <!-- 樣板 (2)：純圖無 markers -->
+          <figure :class="zoomedFigure === 'fig-2'
+            ? 'fixed inset-0 z-50 bg-slate-950/95 overflow-auto p-6 cursor-zoom-out'
+            : 'rounded-lg overflow-hidden bg-slate-900/60 border border-slate-800'"
+            @click="if (zoomedFigure === 'fig-2') zoomedFigure = null"
+            @keydown.escape.window="zoomedFigure = null">
+            <div @click.stop
+                 :class="zoomedFigure === 'fig-2' ? 'max-w-7xl mx-auto bg-slate-900 rounded-lg overflow-hidden' : ''">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
+                   alt="後台示意圖 2"
+                   class="block w-full cursor-zoom-in"
+                   @click.stop="zoomedFigure = (zoomedFigure === 'fig-2' ? null : 'fig-2')">
+              <figcaption class="p-3 text-xs text-slate-400 border-t border-slate-800">圖 2：純圖（無步驟標記）</figcaption>
+            </div>
+          </figure>
+        </div>
+        <!-- /COMPONENT: IMG_GALLERY -->
+      </section>
+
+      <section id="section-5">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">6</div>
+          <div>
+            <h2 class="text-2xl font-bold">行動清單</h2>
+            <p class="text-sm text-slate-400 mt-1">點擊勾選即可，狀態跟著進度條動。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: CHECKLIST -->
+        <div class="rounded-lg bg-slate-900/60 border border-slate-800 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs uppercase tracking-wider text-slate-500">完成度</span>
+            <span class="text-xs text-slate-400">
+              <span x-text="doneCount"></span> / <span x-text="todos.length"></span>
+            </span>
+          </div>
+          <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden mb-5" data-reveal data-progress="checklist">
+            <div class="h-full bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-400 transition-all duration-1000"
+                 :style="'width: ' + (progressVisible ? (todos.length === 0 ? 0 : (doneCount / todos.length * 100)) : 0) + '%'"></div>
+          </div>
+
+          <ul class="space-y-3">
+            <template x-for="todo in todos" :key="todo.id">
+              <li class="flex items-center gap-3 cursor-pointer group" @click="toggleTodo(todo.id)">
+                <span class="w-5 h-5 rounded flex-shrink-0 flex items-center justify-center text-xs transition-colors"
+                      :class="todo.done
+                        ? 'bg-emerald-500 text-slate-900'
+                        : 'bg-slate-800 border border-slate-700 group-hover:border-slate-600'">
+                  <span x-show="todo.done">✓</span>
+                </span>
+                <span class="text-sm transition-colors"
+                      :class="todo.done ? 'line-through text-slate-500' : 'text-slate-200'"
+                      x-text="todo.title"></span>
+              </li>
+            </template>
+          </ul>
+        </div>
+        <!-- /COMPONENT: CHECKLIST -->
+      </section>
+
+      <section id="section-tabs">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">7</div>
+          <div>
+            <h2 class="text-2xl font-bold">即時對照演示</h2>
+            <p class="text-sm text-slate-400 mt-1">同一份「程式碼審查報告」分別用 Markdown 與 HTML 呈現。切換 tab 感受差別。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: TABS -->
+        <!--
+          Alpine `activeTab` 控制顯示；用 x-show + x-cloak 避免初始閃動。
+          active 樣式：text-cyan-300 + 底線 border-b-2 border-cyan-400；inactive：text-slate-400。
+          panel 可放任何內容（code block、卡片、表格…），不限於文字。
+          tab 數量看需求調整 `tabs` 陣列；2~4 個最合適，超過考慮改用其他導覽。
+        -->
+        <div class="rounded-lg bg-slate-900/60 border border-slate-800 overflow-hidden">
+          <div class="flex border-b border-slate-800">
+            <template x-for="t in tabs" :key="t.id">
+              <button @click="activeTab = t.id"
+                      :class="activeTab === t.id
+                        ? 'text-cyan-300 border-cyan-400 bg-slate-900/60'
+                        : 'text-slate-400 border-transparent hover:text-slate-200'"
+                      class="flex-1 px-5 py-3 text-sm font-medium border-b-2 transition-colors"
+                      x-text="t.label"></button>
+            </template>
+          </div>
+          <div class="p-6">
+            <div x-show="activeTab === 'md'" x-cloak>
+              <pre class="text-sm text-slate-300 leading-relaxed overflow-x-auto font-mono"><code># 程式碼審查報告
+
+## 摘要
+- 嚴重：2
+- 警告：3
+- 資訊：1
+- 通過：4
+
+## 嚴重問題
+
+### auth.ts:42 — 未驗證的 SQL 字串拼接
+存在 SQL injection 風險。應改用參數化查詢。
+
+### api/users.ts:118 — Bearer token 未過期檢查
+任何過期 token 都被視為有效。
+
+## 警告
+- forms.tsx:88 — 缺少 onError handler
+- utils/parse.ts:23 — 未處理 null
+- styles.css:412 — 未使用的 selector
+
+## 資訊
+- README.md — 文件版本過舊
+
+## 通過
+... (省略)</code></pre>
+            </div>
+            <div x-show="activeTab === 'html'" x-cloak class="space-y-3 text-sm text-slate-300 leading-relaxed">
+              <p>上方 §3 ~ §6 即為同一份報告的 HTML 呈現：</p>
+              <ul class="space-y-1.5 list-disc list-inside text-slate-400">
+                <li>STATS_ROW 直接看到嚴重度分布</li>
+                <li>DATA_TABLE 可搜尋、按嚴重度篩選</li>
+                <li>KANBAN 可拖拉修改狀態</li>
+                <li>CHECKLIST 可勾選追蹤完成度</li>
+              </ul>
+              <p class="text-xs text-slate-500 pt-2 border-t border-slate-800">同一份內容，從「讀」變成「用」。</p>
+            </div>
+          </div>
+        </div>
+        <!-- /COMPONENT: TABS -->
+      </section>
+
+      <section id="section-flow">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">8</div>
+          <div>
+            <h2 class="text-2xl font-bold">流程圖</h2>
+            <p class="text-sm text-slate-400 mt-1">手刻 SVG，跟頁面同一套設計語言：圓角卡片、slate 邊、cyan 強調。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: SVG_FLOW -->
+        <!--
+          手刻 SVG 流程圖。為什麼不用 mermaid：mermaid 的字體（等寬）、形狀（菱形/圓柱）、
+          自動 layout、edgeLabel 樣式都跟 editorial 風格衝突，且 theme 調不到滿意。
+
+          設計約定：
+          - 節點 rect：rx=8、fill #0f172a fill-opacity=0.7、stroke 預設 #334155 (slate-700)
+          - 強調節點（decision / entry）：stroke #22d3ee (cyan-400)，stroke-width=1.5
+          - 失敗 / 終止節點：stroke #f87171 (red-400)，text 同色
+          - 連線：stroke #64748b (slate-500)，width=1.5，末端共用 #flow-arrow marker
+          - 高亮路徑（happy path）：連線 stroke 改 #22d3ee
+          - 字體 inherit body；text-anchor=middle，y = rect 中心 + 4（視覺置中）
+
+          用法：依實際內容調節點數量、座標、connector path。
+          常用座標：節點高 44、行間距 60；橫向間距 30-50 留給連線。
+        -->
+        <div class="rounded-lg bg-slate-900/60 border border-slate-800 p-6 overflow-x-auto">
+          <svg viewBox="0 0 800 220" class="w-full h-auto max-w-3xl mx-auto block" style="font-family: inherit;">
+            <defs>
+              <marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/>
+              </marker>
+              <marker id="flow-arrow-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#22d3ee"/>
+              </marker>
+            </defs>
+
+            <path d="M160,102 H200" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#flow-arrow)"/>
+            <path d="M310,90 C340,90 340,42 360,42" stroke="#22d3ee" stroke-width="1.5" fill="none" marker-end="url(#flow-arrow-cyan)"/>
+            <path d="M310,114 C340,114 340,154 360,154" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#flow-arrow)"/>
+            <path d="M490,42 H530" stroke="#22d3ee" stroke-width="1.5" fill="none" marker-end="url(#flow-arrow-cyan)"/>
+            <path d="M610,42 H650" stroke="#22d3ee" stroke-width="1.5" fill="none" marker-end="url(#flow-arrow-cyan)"/>
+
+            <text x="335" y="60" text-anchor="middle" fill="#22d3ee" font-size="11">yes</text>
+            <text x="335" y="142" text-anchor="middle" fill="#94a3b8" font-size="11">no</text>
+
+            <g>
+              <rect x="20" y="80" width="140" height="44" rx="8" fill="#0f172a" fill-opacity="0.7" stroke="#334155" stroke-width="1"/>
+              <text x="90" y="106" text-anchor="middle" fill="#e2e8f0" font-size="13">User Request</text>
+            </g>
+            <g>
+              <rect x="200" y="80" width="110" height="44" rx="8" fill="#0f172a" fill-opacity="0.7" stroke="#22d3ee" stroke-width="1.5"/>
+              <text x="255" y="106" text-anchor="middle" fill="#22d3ee" font-size="13">Auth?</text>
+            </g>
+            <g>
+              <rect x="360" y="20" width="130" height="44" rx="8" fill="#0f172a" fill-opacity="0.7" stroke="#334155" stroke-width="1"/>
+              <text x="425" y="46" text-anchor="middle" fill="#e2e8f0" font-size="13">Handler</text>
+            </g>
+            <g>
+              <rect x="530" y="20" width="80" height="44" rx="8" fill="#0f172a" fill-opacity="0.7" stroke="#334155" stroke-width="1"/>
+              <text x="570" y="46" text-anchor="middle" fill="#e2e8f0" font-size="13">DB</text>
+            </g>
+            <g>
+              <rect x="650" y="20" width="130" height="44" rx="8" fill="#0f172a" fill-opacity="0.7" stroke="#334155" stroke-width="1"/>
+              <text x="715" y="46" text-anchor="middle" fill="#e2e8f0" font-size="13">Response</text>
+            </g>
+            <g>
+              <rect x="360" y="132" width="80" height="44" rx="8" fill="#0f172a" fill-opacity="0.7" stroke="#f87171" stroke-width="1.5"/>
+              <text x="400" y="158" text-anchor="middle" fill="#f87171" font-size="13">401</text>
+            </g>
+          </svg>
+        </div>
+        <!-- /COMPONENT: SVG_FLOW -->
+      </section>
+
+      <section id="section-timeline">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">9</div>
+          <div>
+            <h2 class="text-2xl font-bold">時間軸</h2>
+            <p class="text-sm text-slate-400 mt-1">事件回顧、版本歷史、incident timeline。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: TIMELINE -->
+        <ol class="relative border-l-2 border-slate-800 pl-6 space-y-6 ml-2">
+          <li class="relative">
+            <span class="absolute -left-[33px] top-1.5 w-4 h-4 rounded-full bg-gradient-to-br from-cyan-400 to-violet-400 ring-2 ring-slate-950"></span>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="text-xs font-mono text-cyan-300">2026-04-12 09:14</span>
+              <span class="text-xs text-slate-500">@oncall</span>
+            </div>
+            <h3 class="text-base font-semibold text-slate-200">告警觸發</h3>
+            <p class="text-sm text-slate-400 mt-1">API p99 突破 800ms，PagerDuty 派發給值班。</p>
+          </li>
+          <li class="relative">
+            <span class="absolute -left-[33px] top-1.5 w-4 h-4 rounded-full bg-amber-400 ring-2 ring-slate-950"></span>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="text-xs font-mono text-amber-300">09:23</span>
+              <span class="text-xs text-slate-500">@white</span>
+            </div>
+            <h3 class="text-base font-semibold text-slate-200">定位資料庫慢查詢</h3>
+            <p class="text-sm text-slate-400 mt-1">pg_stat_activity 顯示 users 表全表掃描。</p>
+          </li>
+          <li class="relative">
+            <span class="absolute -left-[33px] top-1.5 w-4 h-4 rounded-full bg-emerald-400 ring-2 ring-slate-950"></span>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="text-xs font-mono text-emerald-300">09:48</span>
+              <span class="text-xs text-slate-500">@white</span>
+            </div>
+            <h3 class="text-base font-semibold text-slate-200">補上 index 並重啟服務</h3>
+            <p class="text-sm text-slate-400 mt-1">p99 回到 220ms，告警自動 resolve。</p>
+          </li>
+        </ol>
+        <!-- /COMPONENT: TIMELINE -->
+      </section>
+
+      <section id="section-diff">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">10</div>
+          <div>
+            <h2 class="text-2xl font-bold">變更對照</h2>
+            <p class="text-sm text-slate-400 mt-1">左右對比 before / after，紅 / 綠標示差異。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: DIFF_VIEW -->
+        <div class="rounded-lg bg-slate-900/60 border border-slate-800 overflow-hidden">
+          <div class="flex items-center justify-between px-4 py-2 border-b border-slate-800 bg-slate-950/40">
+            <span class="text-xs font-mono text-slate-400">auth.ts</span>
+            <div class="flex gap-2 text-xs font-mono">
+              <span class="text-red-400">-2</span>
+              <span class="text-emerald-400">+3</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 divide-x divide-slate-800 font-mono text-xs">
+            <div class="p-3 space-y-1 overflow-x-auto">
+              <div class="text-slate-500 mb-2 text-[10px] uppercase tracking-wider">before</div>
+              <div class="bg-red-500/10 text-red-300 px-2 py-0.5 whitespace-pre">- const q = `SELECT * FROM users WHERE id = ${id}`;</div>
+              <div class="bg-red-500/10 text-red-300 px-2 py-0.5 whitespace-pre">- const r = await db.query(q);</div>
+            </div>
+            <div class="p-3 space-y-1 overflow-x-auto">
+              <div class="text-slate-500 mb-2 text-[10px] uppercase tracking-wider">after</div>
+              <div class="bg-emerald-500/10 text-emerald-300 px-2 py-0.5 whitespace-pre">+ const q = 'SELECT * FROM users WHERE id = $1';</div>
+              <div class="bg-emerald-500/10 text-emerald-300 px-2 py-0.5 whitespace-pre">+ const r = await db.query(q, [id]);</div>
+              <div class="bg-emerald-500/10 text-emerald-300 px-2 py-0.5 whitespace-pre">+ logger.info('user_query', { id });</div>
+            </div>
+          </div>
+        </div>
+        <!-- /COMPONENT: DIFF_VIEW -->
+      </section>
+
+      <section id="section-comparison">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">11</div>
+          <div>
+            <h2 class="text-2xl font-bold">方案比較</h2>
+            <p class="text-sm text-slate-400 mt-1">多方案 × 多功能對照；高亮推薦欄。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: COMPARISON_TABLE -->
+        <div class="rounded-lg bg-slate-900/60 border border-slate-800 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-slate-800 bg-slate-950/40">
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">功能</th>
+                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-300">方案 A</th>
+                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-cyan-300 bg-cyan-500/5">方案 B（推薦）</th>
+                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-300">方案 C</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+              <tr>
+                <td class="px-4 py-2.5 text-slate-300">SSO 支援</td>
+                <td class="px-4 py-2.5 text-center text-emerald-400">✓</td>
+                <td class="px-4 py-2.5 text-center text-emerald-400 bg-cyan-500/5">✓</td>
+                <td class="px-4 py-2.5 text-center text-red-400">✗</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 text-slate-300">自架部署</td>
+                <td class="px-4 py-2.5 text-center text-red-400">✗</td>
+                <td class="px-4 py-2.5 text-center text-emerald-400 bg-cyan-500/5">✓</td>
+                <td class="px-4 py-2.5 text-center text-emerald-400">✓</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 text-slate-300">API 完整度</td>
+                <td class="px-4 py-2.5 text-center text-amber-400">部分</td>
+                <td class="px-4 py-2.5 text-center text-emerald-400 bg-cyan-500/5">完整</td>
+                <td class="px-4 py-2.5 text-center text-amber-400">部分</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 text-slate-300">月費（USD）</td>
+                <td class="px-4 py-2.5 text-center text-slate-200">120</td>
+                <td class="px-4 py-2.5 text-center text-slate-200 bg-cyan-500/5">80</td>
+                <td class="px-4 py-2.5 text-center text-slate-200">200</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- /COMPONENT: COMPARISON_TABLE -->
+      </section>
+
+      <section id="section-trend">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">12</div>
+          <div>
+            <h2 class="text-2xl font-bold">趨勢指標</h2>
+            <p class="text-sm text-slate-400 mt-1">大數字 + sparkline，看當前值與 7 天走勢。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: METRIC_TREND -->
+        <!--
+          每張卡 = 一個指標：當前值、與上期差（delta% 用 emerald / red）、Chart.js sparkline。
+          資料定義在 page() 的 metricTrends 陣列；initTrends() 在 Alpine init() 中跑。
+        -->
+        <div class="grid grid-cols-3 gap-3" data-reveal data-chart="trend">
+          <template x-for="m in metricTrends" :key="m.id">
+            <div class="rounded-lg bg-slate-900/60 border border-slate-800 p-4">
+              <div class="text-xs uppercase tracking-wider text-slate-500" x-text="m.label"></div>
+              <div class="flex items-baseline gap-2 mt-1">
+                <div class="text-3xl font-bold text-slate-100" :data-counter="m.value" :data-format="m.format">0</div>
+                <div class="text-xs font-mono"
+                     :class="m.delta >= 0 ? 'text-emerald-400' : 'text-red-400'"
+                     x-text="(m.delta >= 0 ? '+' : '') + m.delta + '%'"></div>
+              </div>
+              <div class="mt-3 h-12">
+                <canvas :id="'trend-' + m.id"></canvas>
+              </div>
+            </div>
+          </template>
+        </div>
+        <!-- /COMPONENT: METRIC_TREND -->
+      </section>
+
+      <section id="section-collapsible">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">13</div>
+          <div>
+            <h2 class="text-2xl font-bold">進階說明</h2>
+            <p class="text-sm text-slate-400 mt-1">把次要 / 較長的內容折疊起來，需要才展開。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: COLLAPSIBLE -->
+        <!--
+          原生 <details>/<summary>，CSS 已隱藏預設箭頭並改用 group-open:rotate-90 的 ›。
+          標題簡短，內容放問句的答案；別把整章塞進來——折疊不是用來藏主軸內容。
+        -->
+        <div class="space-y-2">
+          <details class="group rounded-lg bg-slate-900/60 border border-slate-800 overflow-hidden">
+            <summary class="flex items-center justify-between px-5 py-3 hover:bg-slate-900/80 transition-colors">
+              <span class="text-sm font-medium text-slate-200">為什麼選擇參數化查詢而非 escape</span>
+              <span class="text-slate-500 group-open:rotate-90 transition-transform">›</span>
+            </summary>
+            <div class="px-5 pb-4 pt-3 text-sm text-slate-400 leading-relaxed border-t border-slate-800">
+              escape 需要針對每種 driver、每種 quote 格式處理，容易漏；參數化由 driver 統一處理，覆蓋所有 edge case。即使 escape 寫對也建議改成參數化，降低後續維護風險。
+            </div>
+          </details>
+          <details class="group rounded-lg bg-slate-900/60 border border-slate-800 overflow-hidden">
+            <summary class="flex items-center justify-between px-5 py-3 hover:bg-slate-900/80 transition-colors">
+              <span class="text-sm font-medium text-slate-200">Bearer token exp 檢查的 grace period 怎麼設</span>
+              <span class="text-slate-500 group-open:rotate-90 transition-transform">›</span>
+            </summary>
+            <div class="px-5 pb-4 pt-3 text-sm text-slate-400 leading-relaxed border-t border-slate-800">
+              建議 5 秒寬限以容忍 clock skew；過長會讓被竊取的 token 多一段風險視窗，過短則容易誤判合法請求。
+            </div>
+          </details>
+        </div>
+        <!-- /COMPONENT: COLLAPSIBLE -->
+      </section>
+
+      <section id="section-code">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">14</div>
+          <div>
+            <h2 class="text-2xl font-bold">程式碼塊</h2>
+            <p class="text-sm text-slate-400 mt-1">highlight.js 自動上色 + 右上複製按鈕。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: CODE_BLOCK -->
+        <!--
+          code 必須加 `language-xxx`（typescript / go / python / bash / json / sql…）。
+          複製按鈕呼叫 Alpine `copyCode($event)`，1.5 秒後恢復文字。
+          template 內已 escape 必要符號（< → &lt;）。
+        -->
+        <div class="relative rounded-lg overflow-hidden border border-slate-800">
+          <div class="flex items-center justify-between px-4 py-2 border-b border-slate-800 bg-slate-950/40">
+            <span class="text-xs font-mono text-slate-400">auth.ts</span>
+            <button @click="copyCode($event)"
+                    class="text-xs text-slate-400 hover:text-cyan-300 transition-colors px-2 py-0.5 rounded border border-slate-700 hover:border-cyan-500/50">
+              複製
+            </button>
+          </div>
+          <pre class="!m-0 p-5 bg-slate-950/40"><code class="language-typescript text-sm">async function authenticate(token: string) {
+  const decoded = jwt.verify(token, SECRET);
+  if (decoded.exp &lt; Date.now() / 1000) {
+    throw new UnauthorizedError('token expired');
+  }
+  return decoded;
+}</code></pre>
+        </div>
+        <!-- /COMPONENT: CODE_BLOCK -->
+      </section>
+
+      <section id="section-note">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400 flex items-center justify-center text-slate-900 font-bold text-sm">15</div>
+          <div>
+            <h2 class="text-2xl font-bold">提示條</h2>
+            <p class="text-sm text-slate-400 mt-1">文章中夾資訊／警告／成功／危險小提醒。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: NOTE_BOX -->
+        <!--
+          四種樣式對應 cyan / amber / emerald / red。
+          左 2px 邊條 + 半透明背景 + badge + 文字；不用 emoji，用 INFO / WARN / OK / DANGER badge。
+        -->
+        <div class="space-y-3">
+          <div class="flex items-start gap-3 rounded-lg border-l-2 border-cyan-400 bg-cyan-500/5 px-4 py-3">
+            <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-cyan-500/20 text-cyan-300 shrink-0 mt-0.5">INFO</span>
+            <p class="text-sm text-slate-300">此份報告自動產生，每週一 09:00 更新。</p>
+          </div>
+          <div class="flex items-start gap-3 rounded-lg border-l-2 border-amber-400 bg-amber-500/5 px-4 py-3">
+            <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-amber-500/20 text-amber-300 shrink-0 mt-0.5">WARN</span>
+            <p class="text-sm text-slate-300">修補 SQL injection 之前不要部署到 production。</p>
+          </div>
+          <div class="flex items-start gap-3 rounded-lg border-l-2 border-emerald-400 bg-emerald-500/5 px-4 py-3">
+            <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-emerald-500/20 text-emerald-300 shrink-0 mt-0.5">OK</span>
+            <p class="text-sm text-slate-300">通過項目達 40%，較上週 +5%。</p>
+          </div>
+          <div class="flex items-start gap-3 rounded-lg border-l-2 border-red-400 bg-red-500/5 px-4 py-3">
+            <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-red-500/20 text-red-300 shrink-0 mt-0.5">DANGER</span>
+            <p class="text-sm text-slate-300">auth.ts:42 線上仍有 SQL injection 風險，立即處理。</p>
+          </div>
+        </div>
+        <!-- /COMPONENT: NOTE_BOX -->
+      </section>
+
+      <section id="sources" class="border-t border-slate-800 pt-10">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 text-xs font-bold">§</div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-200">參考資料</h2>
+            <p class="text-sm text-slate-400 mt-1">本文引用與延伸閱讀。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: SOURCES -->
+        <ul class="space-y-3 text-sm">
+          <li class="flex gap-3">
+            <span class="text-slate-500 font-mono text-xs mt-0.5">[1]</span>
+            <div>
+              <div class="text-slate-200">HTML is the new Markdown</div>
+              <div class="text-slate-500 text-xs">Thariq Shihipar · sunny-nectar-jddf.here.now</div>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-slate-500 font-mono text-xs mt-0.5">[2]</span>
+            <div>
+              <div class="text-slate-200">Markdown for Agents</div>
+              <div class="text-slate-500 text-xs">Cloudflare · blog.cloudflare.com/markdown-for-agents</div>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-slate-500 font-mono text-xs mt-0.5">[3]</span>
+            <div>
+              <div class="text-slate-200">Why Are the New AI Agents Choosing Markdown Over HTML?</div>
+              <div class="text-slate-500 text-xs">HackerNoon</div>
+            </div>
+          </li>
+        </ul>
+        <!-- /COMPONENT: SOURCES -->
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    function page() {
+      return {
+        activeSection: 'hero',
+        toc: [
+          { id: 'hero',                label: '簡介' },
+          { id: 'section-1',           label: '§1 引言' },
+          { id: 'section-2',           label: '§2 對照' },
+          { id: 'section-3',           label: '§3 數據' },
+          { id: 'section-radar',       label: '§4 雷達圖' },
+          { id: 'section-4',           label: '§5 工作流' },
+          { id: 'section-screenshots', label: '★ 操作截圖' },
+          { id: 'section-5',           label: '§6 行動清單' },
+          { id: 'section-tabs',        label: '§7 演示' },
+          { id: 'section-flow',        label: '§8 流程圖' },
+          { id: 'section-timeline',    label: '§9 時間軸' },
+          { id: 'section-diff',        label: '§10 變更對照' },
+          { id: 'section-comparison',  label: '§11 方案比較' },
+          { id: 'section-trend',       label: '§12 趨勢指標' },
+          { id: 'section-collapsible', label: '§13 進階說明' },
+          { id: 'section-code',        label: '§14 程式碼塊' },
+          { id: 'section-note',        label: '§15 提示條' },
+          { id: 'sources',             label: '參考資料' },
+        ],
+
+        itemSearch: '',
+        itemFilter: '全部',
+        items: [
+          { id: 1, severity: '嚴重', location: 'auth.ts:42',       title: '未驗證的 SQL 字串拼接', desc: '使用者輸入直接拼進 query，攻擊者可注入。' },
+          { id: 2, severity: '嚴重', location: 'api/users.ts:118', title: 'Bearer token 未驗證過期', desc: 'verify() 只檢查簽名，沒檢查 exp 欄位。' },
+          { id: 3, severity: '警告', location: 'forms.tsx:88',     title: '缺少 onError handler', desc: 'API 失敗時顯示空畫面而非錯誤訊息。' },
+          { id: 4, severity: '警告', location: 'utils/parse.ts:23', title: '未處理 null 輸入', desc: '邊界情況會丟 TypeError。' },
+          { id: 5, severity: '警告', location: 'styles.css:412',   title: '未使用的 selector', desc: '可清除以縮小 CSS bundle。' },
+          { id: 6, severity: '資訊', location: 'README.md',        title: '文件版本過舊', desc: '指向已下線的 v1 endpoint。' },
+          { id: 7, severity: '通過', location: 'core/db.ts',       title: '查詢使用參數化', desc: '無 SQL injection 風險。' },
+          { id: 8, severity: '通過', location: 'core/logger.ts',   title: '結構化 logging', desc: '依規範實作。' },
+          { id: 9, severity: '通過', location: 'tests/auth.test.ts', title: '覆蓋率充足', desc: 'all green。' },
+          { id: 10, severity: '通過', location: 'CI workflow',     title: 'pipeline 正常', desc: '近 30 次皆 pass。' },
+        ],
+
+        get filteredItems() {
+          const q = this.itemSearch.toLowerCase();
+          return this.items.filter(item => {
+            const matchesQ = !q
+              || item.title.toLowerCase().includes(q)
+              || item.desc.toLowerCase().includes(q)
+              || item.location.toLowerCase().includes(q);
+            const matchesF = this.itemFilter === '全部' || item.severity === this.itemFilter;
+            return matchesQ && matchesF;
+          });
+        },
+
+        severityClass(s) {
+          return {
+            '嚴重': 'bg-red-500/20 text-red-300',
+            '警告': 'bg-amber-500/20 text-amber-300',
+            '資訊': 'bg-cyan-500/20 text-cyan-300',
+            '通過': 'bg-emerald-500/20 text-emerald-300',
+          }[s];
+        },
+
+        kanbanCards: {
+          '待辦': [
+            { id: 'k-1', title: '修補 auth.ts SQL injection',   priority: '高' },
+            { id: 'k-2', title: '清理未使用的 CSS',              priority: '低' },
+            { id: 'k-3', title: '替 forms.tsx 加 onError',       priority: '中' },
+          ],
+          '進行中': [
+            { id: 'k-4', title: 'Bearer token 加 exp 檢查',      priority: '高' },
+          ],
+          '已完成': [
+            { id: 'k-5', title: '更新 README 版本',              priority: '低' },
+          ],
+        },
+        draggingCardId: null,
+        draggingFromCol: null,
+        onDragStart(cardId, fromCol) {
+          this.draggingCardId = cardId;
+          this.draggingFromCol = fromCol;
+        },
+        onDrop(toCol) {
+          if (!this.draggingCardId || this.draggingFromCol === toCol) {
+            this.draggingCardId = null;
+            return;
+          }
+          const fromList = this.kanbanCards[this.draggingFromCol];
+          const idx = fromList.findIndex(c => c.id === this.draggingCardId);
+          if (idx < 0) return;
+          const [card] = fromList.splice(idx, 1);
+          this.kanbanCards[toCol].push(card);
+          this.draggingCardId = null;
+        },
+        priorityClass(p) {
+          return {
+            '高': 'bg-red-500/20 text-red-300',
+            '中': 'bg-amber-500/20 text-amber-300',
+            '低': 'bg-slate-500/20 text-slate-300',
+          }[p];
+        },
+
+        todos: [
+          { id: 't-1', title: '修補 auth.ts SQL injection',          done: true  },
+          { id: 't-2', title: '替 Bearer token 加 exp 檢查',         done: true  },
+          { id: 't-3', title: '替 forms.tsx 加 onError handler',     done: false },
+          { id: 't-4', title: '替 utils/parse.ts 加 null 防呆',      done: false },
+          { id: 't-5', title: '清除 styles.css:412 未使用 selector', done: false },
+          { id: 't-6', title: '更新 README 指向 v2 endpoint',        done: false },
+        ],
+        get doneCount() { return this.todos.filter(t => t.done).length; },
+        toggleTodo(id) {
+          const t = this.todos.find(x => x.id === id);
+          if (t) t.done = !t.done;
+        },
+
+        zoomedFigure: null,
+        hoveredStep: null,
+        scrollProgress: 0,
+
+        activeTab: 'md',
+        tabs: [
+          { id: 'md',   label: 'Markdown 版' },
+          { id: 'html', label: 'HTML 版（往下捲動互動）' },
+        ],
+
+        radarDatasets: [
+          { label: 'Markdown', color: '#f472b6', data: [8, 1, 1, 2, 1, 2] },
+          { label: 'HTML',     color: '#22d3ee', data: [7, 9, 9, 9, 8, 8] },
+        ],
+
+        metricTrends: [
+          { id: 'rps',   label: 'Requests/sec', value: 1240, format: 'comma',   delta:  12, data: [820, 880, 910, 950, 1020, 1180, 1240] },
+          { id: 'p99',   label: 'p99 latency',  value: 380,  format: 'ms',      delta:  -8, data: [520, 510, 480, 460, 430, 400, 380] },
+          { id: 'error', label: 'Error rate',   value: 0.12, format: 'percent', delta:  23, data: [0.09, 0.08, 0.09, 0.10, 0.11, 0.11, 0.12] },
+        ],
+        radarInited: false,
+        trendsInited: false,
+        progressVisible: false,
+
+        animateCounter(el) {
+          const target = parseFloat(el.getAttribute('data-counter'));
+          if (isNaN(target)) return;
+          const format = el.getAttribute('data-format') || 'int';
+          const duration = 1200;
+          const start = performance.now();
+          const easeOut = t => 1 - Math.pow(1 - t, 3);
+          const tick = now => {
+            const p = Math.min((now - start) / duration, 1);
+            el.textContent = this.formatCounter(target * easeOut(p), format);
+            if (p < 1) requestAnimationFrame(tick);
+            else el.textContent = this.formatCounter(target, format);
+          };
+          requestAnimationFrame(tick);
+        },
+        formatCounter(v, format) {
+          if (format === 'comma')   return Math.round(v).toLocaleString();
+          if (format === 'percent') return v.toFixed(2) + '%';
+          if (format === 'ms')      return Math.round(v) + 'ms';
+          return Math.round(v).toString();
+        },
+        initTrends() {
+          if (this.trendsInited) return;
+          if (typeof Chart === 'undefined') return;
+          this.trendsInited = true;
+          this.metricTrends.forEach(m => {
+            const el = document.getElementById('trend-' + m.id);
+            if (!el) return;
+            const positive = m.delta >= 0;
+            const isLatencyLike = m.id === 'p99' || m.id === 'error';
+            const good = positive !== isLatencyLike;
+            const color = good ? '#34d399' : '#f87171';
+            new Chart(el, {
+              type: 'line',
+              data: {
+                labels: m.data.map((_, i) => i),
+                datasets: [{
+                  data: m.data,
+                  borderColor: color,
+                  backgroundColor: color + '22',
+                  borderWidth: 2,
+                  pointRadius: 0,
+                  tension: 0.35,
+                  fill: true,
+                }],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                scales: { x: { display: false }, y: { display: false } },
+              },
+            });
+          });
+        },
+
+        copyCode(ev) {
+          const btn = ev.currentTarget;
+          const wrap = btn.closest('.relative');
+          const code = wrap?.querySelector('code')?.innerText ?? '';
+          navigator.clipboard.writeText(code);
+          const orig = btn.textContent;
+          btn.textContent = '✓ 已複製';
+          btn.classList.add('text-emerald-300');
+          setTimeout(() => {
+            btn.textContent = orig;
+            btn.classList.remove('text-emerald-300');
+          }, 1500);
+        },
+        initRadar() {
+          if (this.radarInited) return;
+          if (typeof Chart === 'undefined') return;
+          const el = document.getElementById('radarChart');
+          if (!el) return;
+          this.radarInited = true;
+          new Chart(el, {
+            type: 'radar',
+            data: {
+              labels: ['可讀性', '互動性', '視覺豐富度', '可分享性', '狀態追蹤', '可重用性'],
+              datasets: this.radarDatasets.map(d => ({
+                label: d.label,
+                data: d.data,
+                borderColor: d.color,
+                backgroundColor: d.color + '26',
+                pointBackgroundColor: d.color,
+                pointBorderColor: '#0b1020',
+                borderWidth: 2,
+                pointRadius: 3,
+              })),
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: { legend: { display: false } },
+              scales: {
+                r: {
+                  suggestedMin: 0,
+                  suggestedMax: 10,
+                  angleLines: { color: 'rgba(148, 163, 184, 0.18)' },
+                  grid:       { color: 'rgba(148, 163, 184, 0.18)' },
+                  ticks: { display: false, backdropColor: 'transparent' },
+                  pointLabels: { color: '#cbd5e1', font: { size: 12 } },
+                },
+              },
+            },
+          });
+        },
+
+        init() {
+          this.$nextTick(() => {
+            const obs = new IntersectionObserver(entries => {
+              entries.forEach(e => {
+                if (e.isIntersecting) this.activeSection = e.target.id;
+              });
+            }, { rootMargin: '-30% 0px -55% 0px' });
+            document.querySelectorAll('main > section[id]').forEach(s => obs.observe(s));
+
+            const reveal = new IntersectionObserver(entries => {
+              entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                const el = e.target;
+                el.classList.add('is-visible');
+                const chart = el.getAttribute('data-chart');
+                if (chart === 'radar') this.initRadar();
+                if (chart === 'trend') this.initTrends();
+                if (el.getAttribute('data-progress') === 'checklist') this.progressVisible = true;
+                el.querySelectorAll('[data-counter]').forEach(c => this.animateCounter(c));
+                reveal.unobserve(el);
+              });
+            }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+            document.querySelectorAll('[data-reveal]').forEach(el => reveal.observe(el));
+
+            if (typeof hljs !== 'undefined') {
+              document.querySelectorAll('pre code[class*="language-"]').forEach(el => hljs.highlightElement(el));
+            }
+          });
+          window.addEventListener('scroll', () => {
+            const el = document.documentElement;
+            const scrollable = el.scrollHeight - el.clientHeight;
+            this.scrollProgress = scrollable > 0 ? (el.scrollTop / scrollable) * 100 : 0;
+          }, { passive: true });
+        },
+      };
+    }
+  </script>
+</body>
+</html>

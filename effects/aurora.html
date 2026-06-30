@@ -1,0 +1,78 @@
+<!-- EFFECT: AURORA -->
+<canvas id="aurora-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;"></canvas>
+<script>
+(function(){
+  const canvas = document.getElementById('aurora-canvas');
+  const ctx = canvas.getContext('2d');
+
+  const bands = [
+    {color:[34,211,238],  yBase:0.25, amp:60,  freq:0.003, speed:0.0004, width:120, alpha:0.04},
+    {color:[167,139,250], yBase:0.30, amp:50,  freq:0.004, speed:0.0003, width:100, alpha:0.035},
+    {color:[52,211,153],  yBase:0.35, amp:70,  freq:0.002, speed:0.0005, width:140, alpha:0.03},
+  ];
+
+  let w, h, t = 0, rafId, paused = false;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+
+  function drawBand(b){
+    const [r,g,bl] = b.color;
+    const yb = b.yBase * h;
+    const topY = yb - b.width * 0.5;
+    const midY = yb + b.width * 0.35;
+
+    const grad = ctx.createLinearGradient(0, topY, 0, yb + b.width * 0.7);
+    grad.addColorStop(0,   `rgba(${r},${g},${bl},${b.alpha})`);
+    grad.addColorStop(0.5, `rgba(${r},${g},${bl},${b.alpha * 0.5})`);
+    grad.addColorStop(1,   `rgba(${r},${g},${bl},0)`);
+
+    ctx.beginPath();
+    ctx.moveTo(0, h);
+
+    for(let x = 0; x <= w; x += 4){
+      const y = yb
+        + Math.sin(x * b.freq + t * b.speed) * b.amp
+        + Math.sin(x * b.freq * 2.3 - t * b.speed * 1.7) * b.amp * 0.5
+        + Math.sin(x * b.freq * 0.7 + t * b.speed * 0.5) * b.amp * 0.3;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+
+    ctx.lineTo(w, h);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+
+  function step(){
+    ctx.clearRect(0, 0, w, h);
+    for(const b of bands) drawBand(b);
+    t += 1;
+  }
+
+  function loop(){
+    if(!paused) step();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  if(reduced){
+    resize();
+    step();
+  } else {
+    resize();
+    loop();
+
+    document.addEventListener('visibilitychange', ()=>{
+      paused = document.hidden;
+    });
+
+    window.addEventListener('resize', ()=>{
+      resize();
+    });
+  }
+})();
+</script>
+<!-- /EFFECT: AURORA -->

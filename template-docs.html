@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>share-html · docs template</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css">
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: #f8fafc;
+      color: #334155;
+    }
+    [x-cloak] { display: none !important; }
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    [data-reveal] { opacity: 0; transform: translateY(8px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      [data-reveal] { opacity: 1; transform: none; transition: none; }
+    }
+    .hljs { background: transparent !important; padding: 0 !important; }
+    .text-gradient {
+      background-image: linear-gradient(to right, #0891b2, #3b82f6, #7c3aed);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <div x-data="page()" class="grid grid-cols-[260px_minmax(0,1fr)] max-w-6xl mx-auto px-6 pt-16 pb-24 gap-10">
+
+  <!-- COMPONENT: TOP_BAR -->
+  <div class="fixed top-0 left-0 right-0 h-[2px] z-50 bg-slate-200/50">
+    <div class="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500"
+         :style="`width: ${scrollProgress}%`"></div>
+  </div>
+  <!-- /COMPONENT: TOP_BAR -->
+
+    <!-- COMPONENT: STICKY_TOC -->
+    <aside class="sticky top-12 self-start">
+      <div class="text-xs uppercase tracking-widest text-slate-400 mb-4">本頁導覽</div>
+      <nav class="space-y-1 text-sm">
+        <template x-for="item in toc" :key="item.id">
+          <a :href="'#' + item.id"
+             :class="activeSection === item.id
+               ? 'border-l-2 border-cyan-600 text-cyan-700 bg-cyan-50'
+               : 'border-l-2 border-transparent text-slate-500 hover:text-slate-700'"
+             class="block px-3 py-2 transition-colors"
+             x-text="item.label"></a>
+        </template>
+      </nav>
+    </aside>
+    <!-- /COMPONENT: STICKY_TOC -->
+
+    <main class="min-w-0 max-w-3xl space-y-20">
+
+      <!-- COMPONENT: HERO -->
+      <section id="hero">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-300 bg-cyan-50 text-cyan-700 text-xs">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+          <span>docs template · 2026-06-30</span>
+        </div>
+        <h1 class="mt-6 text-5xl font-bold leading-tight text-slate-900">
+          share-html<br/>
+          <span class="text-gradient">docs</span> 模版
+        </h1>
+        <p class="mt-6 text-lg text-slate-500 leading-relaxed">
+          淺色文件風格模版，適合技術文件、安裝指南、設定說明等正式文件輸出。元件皆採白底淺色系，搭配 github 程式碼高亮主題，可直接雙擊開啟分享。
+        </p>
+        <div class="mt-8 flex items-center gap-3 text-sm text-slate-400">
+          <span>@white</span>
+          <span>·</span>
+          <span>v1</span>
+          <span>·</span>
+          <span>單檔 self-contained</span>
+        </div>
+      </section>
+      <!-- /COMPONENT: HERO -->
+
+      <section id="section-1">
+
+        <!-- COMPONENT: SECTION_HEADER -->
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 via-blue-500 to-violet-500 flex items-center justify-center text-white font-bold text-sm">1</div>
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">概述</h2>
+            <p class="text-sm text-slate-500 mt-1">為何選擇此工具，以及它解決了什麼問題。</p>
+          </div>
+        </header>
+        <!-- /COMPONENT: SECTION_HEADER -->
+
+        <!-- COMPONENT: QUOTE_BLOCK -->
+        <blockquote class="relative border-l-2 border-violet-400 bg-violet-50 rounded-r-lg px-6 py-5 mb-6">
+          <div class="absolute -top-2 left-3 text-5xl text-violet-300 font-serif leading-none select-none">&ldquo;</div>
+          <p class="text-lg italic text-slate-700 leading-relaxed pl-6">
+            Simple tools well documented are worth more than complex tools poorly explained.
+          </p>
+          <p class="text-sm text-slate-500 mt-4 pl-6">— 工具設計哲學</p>
+        </blockquote>
+        <!-- /COMPONENT: QUOTE_BLOCK -->
+
+        <p class="text-slate-700 leading-relaxed">
+          本工具採用模組化設計，所有元件皆可獨立使用。無需安裝額外依賴，一份設定檔即可完成所有初始化流程。透過 CDN 載入所有必要資源，可在任何現代瀏覽器中直接開啟使用，無需建置步驟。
+        </p>
+
+      </section>
+
+      <section id="section-2">
+
+        <!-- COMPONENT: SECTION_HEADER -->
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 via-blue-500 to-violet-500 flex items-center justify-center text-white font-bold text-sm">2</div>
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">安裝指南</h2>
+            <p class="text-sm text-slate-500 mt-1">從零開始，三步驟完成安裝與初始化。</p>
+          </div>
+        </header>
+        <!-- /COMPONENT: SECTION_HEADER -->
+
+        <!-- COMPONENT: CODE_BLOCK -->
+        <div class="relative rounded-lg overflow-hidden border border-slate-200 mb-6">
+          <div class="flex items-center justify-between px-4 py-2 border-b border-slate-200 bg-slate-100">
+            <span class="text-xs font-mono text-slate-500">terminal</span>
+            <button @click="copyCode($event)"
+                    class="text-xs text-slate-400 hover:text-cyan-600 transition-colors px-2 py-0.5 rounded border border-slate-300 hover:border-cyan-400">
+              複製
+            </button>
+          </div>
+          <pre class="!m-0 p-5 bg-slate-50 overflow-x-auto"><code class="language-bash text-sm"># 1. 下載專案
+git clone https://github.com/example/project.git
+cd project
+
+# 2. 安裝依賴
+npm install
+
+# 3. 啟動開發伺服器
+npm run dev</code></pre>
+        </div>
+        <!-- /COMPONENT: CODE_BLOCK -->
+
+        <!-- COMPONENT: NOTE_BOX -->
+        <div class="flex items-start gap-3 rounded-lg border-l-2 border-cyan-500 bg-cyan-50 px-4 py-3">
+          <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-cyan-100 text-cyan-700 shrink-0 mt-0.5">INFO</span>
+          <p class="text-sm text-slate-700">Node.js 18+ 為必要條件。可透過 <code class="font-mono bg-cyan-100 text-cyan-800 px-1 rounded text-xs">node --version</code> 確認目前版本是否符合需求。</p>
+        </div>
+        <!-- /COMPONENT: NOTE_BOX -->
+
+      </section>
+
+      <section id="section-3">
+
+        <!-- COMPONENT: SECTION_HEADER -->
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 via-blue-500 to-violet-500 flex items-center justify-center text-white font-bold text-sm">3</div>
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">設定說明</h2>
+            <p class="text-sm text-slate-500 mt-1">常見問題與進階設定選項。</p>
+          </div>
+        </header>
+        <!-- /COMPONENT: SECTION_HEADER -->
+
+        <!-- COMPONENT: COLLAPSIBLE -->
+        <div class="space-y-2 mb-6">
+          <details class="group rounded-lg bg-white border border-slate-200 overflow-hidden">
+            <summary class="flex items-center justify-between px-5 py-3 hover:bg-slate-50 transition-colors">
+              <span class="text-sm font-medium text-slate-700">如何修改預設連接埠？</span>
+              <span class="text-slate-400 group-open:rotate-90 transition-transform">›</span>
+            </summary>
+            <div class="px-5 pb-4 pt-3 text-sm text-slate-600 leading-relaxed border-t border-slate-200">
+              在專案根目錄建立 <code class="font-mono bg-slate-100 text-slate-700 px-1 rounded text-xs">.env</code> 檔案，加入 <code class="font-mono bg-slate-100 text-slate-700 px-1 rounded text-xs">PORT=3001</code>。若使用 Docker，請同時更新 <code class="font-mono bg-slate-100 text-slate-700 px-1 rounded text-xs">docker-compose.yml</code> 中的 ports 設定，確保 host 與 container 兩端的埠號一致。
+            </div>
+          </details>
+          <details class="group rounded-lg bg-white border border-slate-200 overflow-hidden">
+            <summary class="flex items-center justify-between px-5 py-3 hover:bg-slate-50 transition-colors">
+              <span class="text-sm font-medium text-slate-700">如何在本機啟用 HTTPS？</span>
+              <span class="text-slate-400 group-open:rotate-90 transition-transform">›</span>
+            </summary>
+            <div class="px-5 pb-4 pt-3 text-sm text-slate-600 leading-relaxed border-t border-slate-200">
+              本機開發建議使用 <code class="font-mono bg-slate-100 text-slate-700 px-1 rounded text-xs">mkcert</code> 建立受信任的本機憑證，並設定 <code class="font-mono bg-slate-100 text-slate-700 px-1 rounded text-xs">SSL_CERT</code> 與 <code class="font-mono bg-slate-100 text-slate-700 px-1 rounded text-xs">SSL_KEY</code> 環境變數指向對應憑證路徑。正式環境建議在反向代理層（Nginx / Caddy）終止 TLS，應用層維持 HTTP。
+            </div>
+          </details>
+        </div>
+        <!-- /COMPONENT: COLLAPSIBLE -->
+
+        <!-- COMPONENT: NOTE_BOX -->
+        <div class="flex items-start gap-3 rounded-lg border-l-2 border-amber-500 bg-amber-50 px-4 py-3">
+          <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-amber-100 text-amber-700 shrink-0 mt-0.5">WARN</span>
+          <p class="text-sm text-slate-700">環境變數中不應存放明文密鑰。請使用密鑰管理工具（如 Vault、AWS Secrets Manager）統一管理敏感設定。</p>
+        </div>
+        <!-- /COMPONENT: NOTE_BOX -->
+
+      </section>
+
+      <section id="sources" class="border-t border-slate-200 pt-10">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-bold">§</div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">參考資料</h2>
+            <p class="text-sm text-slate-500 mt-1">本文引用與延伸閱讀。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: SOURCES -->
+        <ul class="space-y-3 text-sm">
+          <li class="flex gap-3">
+            <span class="text-slate-400 font-mono text-xs mt-0.5">[1]</span>
+            <div>
+              <div class="text-slate-800">Node.js 官方文件</div>
+              <div class="text-slate-400 text-xs">nodejs.org/en/docs</div>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-slate-400 font-mono text-xs mt-0.5">[2]</span>
+            <div>
+              <div class="text-slate-800">mkcert — 本機 HTTPS 憑證工具</div>
+              <div class="text-slate-400 text-xs">github.com/FiloSottile/mkcert</div>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-slate-400 font-mono text-xs mt-0.5">[3]</span>
+            <div>
+              <div class="text-slate-800">The Twelve-Factor App — Config</div>
+              <div class="text-slate-400 text-xs">12factor.net/config</div>
+            </div>
+          </li>
+        </ul>
+        <!-- /COMPONENT: SOURCES -->
+
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    function page() {
+      return {
+        activeSection: 'hero',
+        toc: [
+          { id: 'hero',      label: '簡介' },
+          { id: 'section-1', label: '§1 概述' },
+          { id: 'section-2', label: '§2 安裝指南' },
+          { id: 'section-3', label: '§3 設定說明' },
+          { id: 'sources',   label: '參考資料' },
+        ],
+
+        scrollProgress: 0,
+
+        copyCode(ev) {
+          const btn = ev.currentTarget;
+          const wrap = btn.closest('.relative');
+          const code = wrap?.querySelector('code')?.innerText ?? '';
+          navigator.clipboard.writeText(code);
+          const orig = btn.textContent;
+          btn.textContent = '✓ 已複製';
+          btn.classList.add('text-emerald-600');
+          setTimeout(() => {
+            btn.textContent = orig;
+            btn.classList.remove('text-emerald-600');
+          }, 1500);
+        },
+
+        init() {
+          this.$nextTick(() => {
+            const obs = new IntersectionObserver(entries => {
+              entries.forEach(e => {
+                if (e.isIntersecting) this.activeSection = e.target.id;
+              });
+            }, { rootMargin: '-30% 0px -55% 0px' });
+            document.querySelectorAll('main > section[id]').forEach(s => obs.observe(s));
+
+            const reveal = new IntersectionObserver(entries => {
+              entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                e.target.classList.add('is-visible');
+                reveal.unobserve(e.target);
+              });
+            }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+            document.querySelectorAll('[data-reveal]').forEach(el => reveal.observe(el));
+
+            if (typeof hljs !== 'undefined') {
+              document.querySelectorAll('pre code[class*="language-"]').forEach(el => hljs.highlightElement(el));
+            }
+          });
+
+          window.addEventListener('scroll', () => {
+            const el = document.documentElement;
+            const scrollable = el.scrollHeight - el.clientHeight;
+            this.scrollProgress = scrollable > 0 ? (el.scrollTop / scrollable) * 100 : 0;
+          }, { passive: true });
+        },
+      };
+    }
+  </script>
+</body>
+</html>

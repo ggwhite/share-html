@@ -1,0 +1,70 @@
+<!-- EFFECT: PARALLAX-DEPTH -->
+<canvas id="fx-parallax" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const canvas = document.getElementById('fx-parallax');
+  const ctx = canvas.getContext('2d');
+  let raf, paused = false;
+
+  const LAYERS = [
+    { count: 30, speed: 0.02, size: 1,   alpha: 0.2  },
+    { count: 20, speed: 0.05, size: 1.5, alpha: 0.35 },
+    { count: 12, speed: 0.1,  size: 2.5, alpha: 0.5  },
+  ];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  // pre-generate fixed positions in a 2000×2000 virtual space
+  const dots = LAYERS.map(function (layer) {
+    return {
+      layer: layer,
+      pts: Array.from({ length: layer.count }, function () {
+        return { x: Math.random() * 2000, y: Math.random() * 2000 };
+      }),
+    };
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    paused = document.hidden;
+    if (!paused) raf = requestAnimationFrame(loop);
+  });
+
+  function loop() {
+    if (paused) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const W = canvas.width;
+    const H = canvas.height;
+    const scrollY = window.scrollY || 0;
+
+    dots.forEach(function (group) {
+      const layer = group.layer;
+      ctx.fillStyle = 'rgba(148,163,184,' + layer.alpha + ')';
+      group.pts.forEach(function (p) {
+        // map virtual 2000-wide space to screen width
+        const sx = (p.x / 2000) * W;
+        // shift y by scroll, wrap in screen height
+        const rawY = p.y - scrollY * layer.speed;
+        const sy = ((rawY % H) + H) % H;
+
+        ctx.beginPath();
+        ctx.arc(sx, sy, layer.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    });
+
+    raf = requestAnimationFrame(loop);
+  }
+
+  raf = requestAnimationFrame(loop);
+})();
+</script>
+<!-- /EFFECT: PARALLAX-DEPTH -->

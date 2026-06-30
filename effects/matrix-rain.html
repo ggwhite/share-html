@@ -1,0 +1,70 @@
+<!-- EFFECT: MATRIX-RAIN -->
+<canvas id="fx-matrix" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const canvas = document.getElementById('fx-matrix');
+  const ctx = canvas.getContext('2d');
+  const CHARS = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789';
+  const FONT_SIZE = 14;
+  const INTERVAL = 50;
+  let drops = [];
+  let cols = 0;
+  let lastTime = 0;
+  let raf, paused = false;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    cols = Math.floor(canvas.width / FONT_SIZE);
+    // preserve existing drops, add new cols, trim removed ones
+    const prev = drops.slice();
+    drops = Array.from({ length: cols }, function (_, i) {
+      return prev[i] !== undefined ? prev[i] : -Math.floor(Math.random() * 100);
+    });
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  document.addEventListener('visibilitychange', function () {
+    paused = document.hidden;
+    if (!paused) raf = requestAnimationFrame(loop);
+  });
+
+  function loop(ts) {
+    if (paused) return;
+    raf = requestAnimationFrame(loop);
+
+    if (ts - lastTime < INTERVAL) return;
+    lastTime = ts;
+
+    // trailing fade
+    ctx.fillStyle = 'rgba(11,16,32,0.08)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = FONT_SIZE + 'px monospace';
+
+    for (let i = 0; i < cols; i++) {
+      if (drops[i] < 0) {
+        drops[i]++;
+        continue;
+      }
+      const ch = CHARS[Math.floor(Math.random() * CHARS.length)];
+      const alpha = 0.6 + Math.random() * 0.4;
+      ctx.fillStyle = 'rgba(34,197,94,' + alpha + ')';
+      ctx.fillText(ch, i * FONT_SIZE, drops[i] * FONT_SIZE);
+
+      if (drops[i] * FONT_SIZE > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      } else {
+        drops[i]++;
+      }
+    }
+  }
+
+  raf = requestAnimationFrame(loop);
+})();
+</script>
+<!-- /EFFECT: MATRIX-RAIN -->

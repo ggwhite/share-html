@@ -1,0 +1,13 @@
+<!-- EFFECT: GRADIENT_FLOW -->
+<div id="effect-gradient-flow" class="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+  <style>
+    @media (prefers-reduced-motion: reduce) { #effect-gradient-flow { display: none; } }
+    @keyframes gf-drift-1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(120px, -80px) scale(1.15); } }
+    @keyframes gf-drift-2 { 0%,100% { transform: translate(0,0) scale(1.1); } 50% { transform: translate(-100px, 60px) scale(0.9); } }
+    @keyframes gf-drift-3 { 0%,100% { transform: translate(0,0) scale(0.95); } 50% { transform: translate(80px, 100px) scale(1.1); } }
+  </style>
+  <div style="position:absolute;width:500px;height:500px;top:-10%;left:10%;border-radius:50%;background:rgba(34,211,238,0.12);filter:blur(80px);animation:gf-drift-1 20s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:400px;height:400px;top:50%;right:5%;border-radius:50%;background:rgba(167,139,250,0.10);filter:blur(80px);animation:gf-drift-2 25s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:450px;height:450px;bottom:-5%;left:40%;border-radius:50%;background:rgba(244,114,182,0.08);filter:blur(80px);animation:gf-drift-3 22s ease-in-out infinite;"></div>
+</div>
+<!-- /EFFECT: GRADIENT_FLOW -->

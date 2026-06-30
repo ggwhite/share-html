@@ -1,0 +1,112 @@
+<!-- EFFECT: PARTICLES -->
+<canvas id="fx-particles" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const canvas = document.getElementById('fx-particles');
+  const ctx = canvas.getContext('2d');
+  const MAX = 80;
+  const LINK = 120;
+  const MOUSE = { x: -9999, y: -9999 };
+  let raf, paused = false;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function rand(min, max) { return Math.random() * (max - min) + min; }
+
+  function makeParticle() {
+    return {
+      x: rand(0, canvas.width),
+      y: rand(0, canvas.height),
+      vx: rand(-0.4, 0.4),
+      vy: rand(-0.4, 0.4),
+      r: rand(0.5, 2),
+    };
+  }
+
+  resize();
+  const particles = Array.from({ length: MAX }, makeParticle);
+
+  window.addEventListener('resize', resize);
+
+  window.addEventListener('mousemove', function (e) {
+    MOUSE.x = e.clientX;
+    MOUSE.y = e.clientY;
+  });
+
+  window.addEventListener('mouseleave', function () {
+    MOUSE.x = -9999;
+    MOUSE.y = -9999;
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    paused = document.hidden;
+    if (!paused) raf = requestAnimationFrame(loop);
+  });
+
+  function loop() {
+    if (paused) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const W = canvas.width;
+    const H = canvas.height;
+
+    for (let i = 0; i < MAX; i++) {
+      const p = particles[i];
+
+      // mouse repulsion
+      const dx = p.x - MOUSE.x;
+      const dy = p.y - MOUSE.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 100 && dist > 0) {
+        const force = (100 - dist) / 100;
+        p.vx += (dx / dist) * force * 0.4;
+        p.vy += (dy / dist) * force * 0.4;
+      }
+
+      p.vx *= 0.99;
+      p.vy *= 0.99;
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // wrap
+      if (p.x < 0) p.x += W;
+      if (p.x > W) p.x -= W;
+      if (p.y < 0) p.y += H;
+      if (p.y > H) p.y -= H;
+
+      // draw particle
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(148,163,184,0.5)';
+      ctx.fill();
+
+      // draw links
+      for (let j = i + 1; j < MAX; j++) {
+        const q = particles[j];
+        const lx = p.x - q.x;
+        const ly = p.y - q.y;
+        const d = Math.sqrt(lx * lx + ly * ly);
+        if (d < LINK) {
+          const alpha = 0.15 * (1 - d / LINK);
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = 'rgba(148,163,184,' + alpha + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    raf = requestAnimationFrame(loop);
+  }
+
+  raf = requestAnimationFrame(loop);
+})();
+</script>
+<!-- /EFFECT: PARTICLES -->
