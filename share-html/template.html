@@ -35,6 +35,34 @@
       background-clip: text;
       color: transparent;
     }
+    main .rounded-lg,
+    main .rounded-xl {
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    main .rounded-lg:hover,
+    main .rounded-xl:hover {
+      border-color: #475569;
+    }
+    .hero-grid-bg {
+      background-image: radial-gradient(circle, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    @media (max-width: 767px) {
+      .grid.grid-cols-\[260px_minmax\(0\,1fr\)\] { grid-template-columns: 1fr; }
+      aside.sticky { display: none; }
+      footer.col-span-2 { grid-column: span 1; }
+    }
+    @media print {
+      .fixed { display: none !important; }
+      aside.sticky { display: none !important; }
+      .grid.grid-cols-\[260px_minmax\(0\,1fr\)\] { grid-template-columns: 1fr; }
+      body { background: white; color: #1e293b; }
+      footer.col-span-2 { grid-column: span 1; }
+    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -67,7 +95,9 @@
     <main class="min-w-0 max-w-3xl space-y-20">
 
       <!-- COMPONENT: HERO -->
-      <section id="hero">
+      <section id="hero" class="relative">
+        <div class="hero-grid-bg absolute inset-0 -m-6 opacity-40 pointer-events-none" aria-hidden="true"></div>
+        <div class="relative">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 text-xs">
           <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
           <span>editorial template · 2026-05-11</span>
@@ -85,6 +115,7 @@
           <span>v2</span>
           <span>·</span>
           <span>單檔 self-contained</span>
+        </div>
         </div>
       </section>
       <!-- /COMPONENT: HERO -->
@@ -886,6 +917,13 @@
       </section>
 
     </main>
+
+    <!-- COMPONENT: FOOTER -->
+    <footer class="col-span-2 border-t border-slate-800 mt-10 pt-6 pb-4 text-center">
+      <p class="text-xs text-slate-600">由 <span class="text-slate-400">share-html</span> 產生 · editorial template</p>
+    </footer>
+    <!-- /COMPONENT: FOOTER -->
+
   </div>
 
   <script>

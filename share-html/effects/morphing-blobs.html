@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effect: Morphing Blobs</title>
+  <style>body { margin: 0; background: #0b1020; min-height: 100vh; overflow: hidden; }</style>
+</head>
+<body>
+
 <!-- EFFECT: MORPHING-BLOBS -->
 <canvas id="fx-blobs" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
 <script>
@@ -9,9 +19,9 @@
   let raf, paused = false;
 
   const BLOBS = [
-    { cx: 0.3, cy: 0.3, r: 180, color: 'rgba(34,211,238,0.07)',   speed: 0.0008, phase: 0 },
-    { cx: 0.7, cy: 0.6, r: 150, color: 'rgba(167,139,250,0.06)',  speed: 0.0006, phase: 2 },
-    { cx: 0.5, cy: 0.8, r: 160, color: 'rgba(244,114,182,0.05)',  speed: 0.0007, phase: 4 },
+    { cx: 0.3, cy: 0.3, r: 180, color: 'rgba(34,211,238,0.15)',   speed: 0.0008, phase: 0 },
+    { cx: 0.7, cy: 0.6, r: 150, color: 'rgba(167,139,250,0.12)',  speed: 0.0006, phase: 2 },
+    { cx: 0.5, cy: 0.8, r: 160, color: 'rgba(244,114,182,0.10)',  speed: 0.0007, phase: 4 },
   ];
 
   const STEPS = 64;
@@ -68,3 +78,11 @@
 })();
 </script>
 <!-- /EFFECT: MORPHING-BLOBS -->
+
+<div style="position:relative;z-index:1;color:#94a3b8;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+  <h1 style="font-size:2.5rem;color:#e2e8f0;margin:0 0 8px;">Morphing Blobs</h1>
+  <p style="font-size:0.875rem;margin:0;">share-html · Medium effect · Organic shapes</p>
+</div>
+
+</body>
+</html>

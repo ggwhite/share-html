@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effect: Parallax Depth</title>
+  <style>body { margin: 0; background: #0b1020; min-height: 200vh; overflow-x: hidden; }</style>
+</head>
+<body>
+
 <!-- EFFECT: PARALLAX-DEPTH -->
 <canvas id="fx-parallax" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
 <script>
@@ -9,9 +19,9 @@
   let raf, paused = false;
 
   const LAYERS = [
-    { count: 30, speed: 0.02, size: 1,   alpha: 0.2  },
-    { count: 20, speed: 0.05, size: 1.5, alpha: 0.35 },
-    { count: 12, speed: 0.1,  size: 2.5, alpha: 0.5  },
+    { count: 40, speed: 0.02, size: 1.2, alpha: 0.3  },
+    { count: 25, speed: 0.05, size: 2,   alpha: 0.5  },
+    { count: 15, speed: 0.1,  size: 3,   alpha: 0.7  },
   ];
 
   function resize() {
@@ -22,7 +32,6 @@
   resize();
   window.addEventListener('resize', resize);
 
-  // pre-generate fixed positions in a 2000×2000 virtual space
   const dots = LAYERS.map(function (layer) {
     return {
       layer: layer,
@@ -49,9 +58,7 @@
       const layer = group.layer;
       ctx.fillStyle = 'rgba(148,163,184,' + layer.alpha + ')';
       group.pts.forEach(function (p) {
-        // map virtual 2000-wide space to screen width
         const sx = (p.x / 2000) * W;
-        // shift y by scroll, wrap in screen height
         const rawY = p.y - scrollY * layer.speed;
         const sy = ((rawY % H) + H) % H;
 
@@ -68,3 +75,15 @@
 })();
 </script>
 <!-- /EFFECT: PARALLAX-DEPTH -->
+
+<div style="position:relative;z-index:1;color:#94a3b8;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+  <h1 style="font-size:2.5rem;color:#e2e8f0;margin:0 0 8px;">Parallax Depth</h1>
+  <p style="font-size:0.875rem;margin:0 0 40px;">share-html · Medium effect · Scroll down to see parallax</p>
+  <svg style="width:24px;height:24px;opacity:0.4;animation:bounce 2s infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+  </svg>
+  <style>@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}</style>
+</div>
+
+</body>
+</html>

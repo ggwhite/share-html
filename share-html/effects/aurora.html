@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effect: Aurora</title>
+  <style>body { margin: 0; background: #0b1020; min-height: 100vh; overflow: hidden; }</style>
+</head>
+<body>
+
 <!-- EFFECT: AURORA -->
 <canvas id="aurora-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;"></canvas>
 <script>
@@ -6,9 +16,9 @@
   const ctx = canvas.getContext('2d');
 
   const bands = [
-    {color:[34,211,238],  yBase:0.25, amp:60,  freq:0.003, speed:0.0004, width:120, alpha:0.04},
-    {color:[167,139,250], yBase:0.30, amp:50,  freq:0.004, speed:0.0003, width:100, alpha:0.035},
-    {color:[52,211,153],  yBase:0.35, amp:70,  freq:0.002, speed:0.0005, width:140, alpha:0.03},
+    {color:[34,211,238],  yBase:0.25, amp:60,  freq:0.003, speed:0.0004, width:120, alpha:0.10},
+    {color:[167,139,250], yBase:0.30, amp:50,  freq:0.004, speed:0.0003, width:100, alpha:0.08},
+    {color:[52,211,153],  yBase:0.35, amp:70,  freq:0.002, speed:0.0005, width:140, alpha:0.07},
   ];
 
   let w, h, t = 0, rafId, paused = false;
@@ -23,7 +33,6 @@
     const [r,g,bl] = b.color;
     const yb = b.yBase * h;
     const topY = yb - b.width * 0.5;
-    const midY = yb + b.width * 0.35;
 
     const grad = ctx.createLinearGradient(0, topY, 0, yb + b.width * 0.7);
     grad.addColorStop(0,   `rgba(${r},${g},${bl},${b.alpha})`);
@@ -76,3 +85,11 @@
 })();
 </script>
 <!-- /EFFECT: AURORA -->
+
+<div style="position:relative;z-index:1;color:#94a3b8;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+  <h1 style="font-size:2.5rem;color:#e2e8f0;margin:0 0 8px;">Aurora</h1>
+  <p style="font-size:0.875rem;margin:0;">share-html · Heavy effect · Northern lights</p>
+</div>
+
+</body>
+</html>

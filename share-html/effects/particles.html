@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effect: Particles</title>
+  <style>body { margin: 0; background: #0b1020; min-height: 100vh; overflow: hidden; }</style>
+</head>
+<body>
+
 <!-- EFFECT: PARTICLES -->
 <canvas id="fx-particles" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
 <script>
@@ -24,7 +34,7 @@
       y: rand(0, canvas.height),
       vx: rand(-0.4, 0.4),
       vy: rand(-0.4, 0.4),
-      r: rand(0.5, 2),
+      r: rand(0.8, 2.5),
     };
   }
 
@@ -58,7 +68,6 @@
     for (let i = 0; i < MAX; i++) {
       const p = particles[i];
 
-      // mouse repulsion
       const dx = p.x - MOUSE.x;
       const dy = p.y - MOUSE.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -73,31 +82,28 @@
       p.x += p.vx;
       p.y += p.vy;
 
-      // wrap
       if (p.x < 0) p.x += W;
       if (p.x > W) p.x -= W;
       if (p.y < 0) p.y += H;
       if (p.y > H) p.y -= H;
 
-      // draw particle
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(148,163,184,0.5)';
+      ctx.fillStyle = 'rgba(148,163,184,0.6)';
       ctx.fill();
 
-      // draw links
       for (let j = i + 1; j < MAX; j++) {
         const q = particles[j];
         const lx = p.x - q.x;
         const ly = p.y - q.y;
         const d = Math.sqrt(lx * lx + ly * ly);
         if (d < LINK) {
-          const alpha = 0.15 * (1 - d / LINK);
+          const alpha = 0.25 * (1 - d / LINK);
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(q.x, q.y);
           ctx.strokeStyle = 'rgba(148,163,184,' + alpha + ')';
-          ctx.lineWidth = 0.5;
+          ctx.lineWidth = 0.6;
           ctx.stroke();
         }
       }
@@ -110,3 +116,11 @@
 })();
 </script>
 <!-- /EFFECT: PARTICLES -->
+
+<div style="position:relative;z-index:1;color:#94a3b8;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+  <h1 style="font-size:2.5rem;color:#e2e8f0;margin:0 0 8px;">Particles</h1>
+  <p style="font-size:0.875rem;margin:0;">share-html · Medium effect · Mouse repulsion</p>
+</div>
+
+</body>
+</html>

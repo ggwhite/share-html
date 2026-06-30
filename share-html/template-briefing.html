@@ -109,6 +109,7 @@
 
   <!-- COMPONENT: DOT_NAV -->
   <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-4 py-3 rounded-full bg-slate-900/80 border border-slate-800 backdrop-blur-sm">
+    <span class="text-xs font-mono text-slate-500 tabular-nums mr-1" x-text="`${activeSlide + 1} / ${slides.length}`"></span>
     <template x-for="(slide, i) in slides" :key="i">
       <a :href="`#slide-${i}`"
          class="dot-nav-dot"
@@ -207,14 +208,36 @@
   </section>
 
   <!-- ═══════════════════════════════════════
-       COMPONENT: CALLOUT_CARD + NOTE_BOX  (slide-2)
+       COMPONENT: QUOTE_BLOCK  (slide-2)
   ════════════════════════════════════════ -->
   <section id="slide-2" class="slide">
+    <div class="max-w-3xl mx-auto px-8 text-center">
+      <div class="flex justify-center mb-8" data-reveal>
+        <span class="section-badge text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">03</span>
+      </div>
+      <div class="relative" data-reveal>
+        <div class="text-7xl text-amber-400/20 font-serif leading-none select-none mb-4">&ldquo;</div>
+        <blockquote class="text-2xl sm:text-3xl font-medium text-slate-200 leading-relaxed max-w-2xl mx-auto">
+          好的系統不是沒有問題的系統，而是能快速發現並解決問題的系統。
+        </blockquote>
+        <div class="mt-8 flex items-center justify-center gap-3">
+          <div class="w-8 h-px bg-amber-400/40"></div>
+          <span class="text-sm text-slate-500">— 本週反思</span>
+          <div class="w-8 h-px bg-amber-400/40"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       COMPONENT: CALLOUT_CARD + NOTE_BOX  (slide-3)
+  ════════════════════════════════════════ -->
+  <section id="slide-3" class="slide">
     <div class="max-w-4xl mx-auto px-8 w-full">
 
       <!-- SECTION_HEADER -->
       <div class="flex items-center gap-3 mb-10" data-reveal>
-        <span class="section-badge text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">03</span>
+        <span class="section-badge text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">04</span>
         <h2 class="text-3xl font-bold">本週<span class="text-gradient">摘要</span></h2>
       </div>
 
@@ -274,14 +297,52 @@
   </section>
 
   <!-- ═══════════════════════════════════════
-       COMPONENT: CHECKLIST  (slide-3)
+       COMPONENT: TIMELINE  (slide-4)
   ════════════════════════════════════════ -->
-  <section id="slide-3" class="slide">
+  <section id="slide-4" class="slide">
+    <div class="max-w-4xl mx-auto px-8 w-full">
+      <div class="flex items-center gap-3 mb-10" data-reveal>
+        <span class="section-badge text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">05</span>
+        <h2 class="text-3xl font-bold">本週<span class="text-gradient">里程碑</span></h2>
+      </div>
+      <ol class="relative border-l-2 border-slate-800 pl-8 space-y-8 ml-3">
+        <li class="relative" data-reveal>
+          <span class="absolute -left-[37px] top-1.5 w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-orange-400 ring-2 ring-slate-950"></span>
+          <div class="flex items-baseline gap-2 mb-1">
+            <span class="text-xs font-mono text-amber-300">週一</span>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-200">API 閘道重構合併</h3>
+          <p class="text-sm text-slate-400 mt-1">延遲降低 34%，全部測試通過。</p>
+        </li>
+        <li class="relative" data-reveal>
+          <span class="absolute -left-[37px] top-1.5 w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-orange-400 ring-2 ring-slate-950"></span>
+          <div class="flex items-baseline gap-2 mb-1">
+            <span class="text-xs font-mono text-amber-300">週三</span>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-200">告警系統演練完成</h3>
+          <p class="text-sm text-slate-400 mt-1">Slack + PagerDuty 雙通道確認正常。</p>
+        </li>
+        <li class="relative" data-reveal>
+          <span class="absolute -left-[37px] top-1.5 w-4 h-4 rounded-full bg-emerald-400 ring-2 ring-slate-950"></span>
+          <div class="flex items-baseline gap-2 mb-1">
+            <span class="text-xs font-mono text-emerald-300">週五</span>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-200">DB 慢查詢全數優化</h3>
+          <p class="text-sm text-slate-400 mt-1">平均查詢從 420ms 降至 28ms，三支高頻 SQL 完成索引。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       COMPONENT: CHECKLIST  (slide-5)
+  ════════════════════════════════════════ -->
+  <section id="slide-5" class="slide">
     <div class="max-w-4xl mx-auto px-8 w-full">
 
       <!-- SECTION_HEADER -->
       <div class="flex items-center gap-3 mb-4" data-reveal>
-        <span class="section-badge text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">04</span>
+        <span class="section-badge text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">06</span>
         <h2 class="text-3xl font-bold">行動<span class="text-gradient">清單</span></h2>
       </div>
 
@@ -325,6 +386,10 @@
     </div>
   </section>
 
+  <div class="py-12 text-center">
+    <p class="text-xs text-slate-600">由 <span class="text-slate-400">share-html</span> 產生 · briefing template</p>
+  </div>
+
   <script>
     function page() {
       return {
@@ -332,7 +397,9 @@
         slides: [
           { label: '封面' },
           { label: '重點數據' },
+          { label: '關鍵引言' },
           { label: '本週摘要' },
+          { label: '里程碑' },
           { label: '行動清單' },
         ],
         scrollProgress: 0,

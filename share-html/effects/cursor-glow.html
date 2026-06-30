@@ -1,6 +1,15 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effect: Cursor Glow</title>
+  <style>body { margin: 0; background: #0b1020; min-height: 100vh; overflow: hidden; }</style>
+</head>
+<body>
+
 <!-- EFFECT: CURSOR_GLOW -->
-<div id="effect-cursor-glow" class="fixed z-0 pointer-events-none" aria-hidden="true"
-     style="width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,0.08) 0%,transparent 70%);transform:translate(-50%,-50%);top:0;left:0;transition:opacity 0.3s;">
+<div id="effect-cursor-glow" style="position:fixed;z-index:0;pointer-events:none;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,0.15) 0%,transparent 70%);transform:translate(-50%,-50%);top:0;left:0;transition:opacity 0.3s;" aria-hidden="true">
 </div>
 <script>
 (function(){
@@ -14,3 +23,11 @@
 })();
 </script>
 <!-- /EFFECT: CURSOR_GLOW -->
+
+<div style="position:relative;z-index:1;color:#94a3b8;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+  <h1 style="font-size:2.5rem;color:#e2e8f0;margin:0 0 8px;">Cursor Glow</h1>
+  <p style="font-size:0.875rem;margin:0;">share-html · Light effect · Move your mouse</p>
+</div>
+
+</body>
+</html>

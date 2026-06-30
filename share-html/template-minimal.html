@@ -10,10 +10,13 @@
     html { scroll-behavior: smooth; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Inter", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background: #0b1020;
+      background:
+        radial-gradient(ellipse 50% 30% at 50% 0%, rgba(148, 163, 184, 0.04) 0%, transparent 60%),
+        #0b1020;
       color: #cbd5e1;
     }
     [x-cloak] { display: none !important; }
+    .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(148, 163, 184, 0.2), transparent); }
     [data-reveal] { opacity: 0; transform: translateY(8px); transition: opacity 0.7s ease, transform 0.7s ease; }
     [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
     @media (prefers-reduced-motion: reduce) {
@@ -31,7 +34,7 @@
         <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
         <span>技術評估報告 · 2026-06-30</span>
       </div>
-      <h1 class="mt-6 text-4xl font-bold leading-tight text-slate-100">
+      <h1 class="mt-6 text-4xl font-bold leading-tight tracking-tight text-slate-100">
         後端框架選型<br/>評估報告
       </h1>
       <p class="mt-5 text-base text-slate-400 leading-relaxed">
@@ -46,6 +49,8 @@
       </div>
     </section>
     <!-- /COMPONENT: HERO -->
+
+    <div class="h-px bg-gradient-to-r from-transparent via-slate-800/50 to-transparent"></div>
 
     <section class="space-y-6" data-reveal>
 
@@ -75,6 +80,8 @@
       <!-- /COMPONENT: CALLOUT_CARD -->
 
     </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-slate-800/50 to-transparent"></div>
 
     <section class="space-y-6" data-reveal>
 
@@ -126,6 +133,8 @@
 
     </section>
 
+    <div class="h-px bg-gradient-to-r from-transparent via-slate-800/50 to-transparent"></div>
+
     <section class="space-y-4" data-reveal>
 
       <!-- COMPONENT: NOTE_BOX type=INFO -->
@@ -158,11 +167,70 @@
 
     </section>
 
+    <div class="h-px bg-gradient-to-r from-transparent via-slate-800/50 to-transparent"></div>
+
+    <section class="space-y-4" data-reveal>
+
+      <!-- COMPONENT: SECTION_HEADER -->
+      <header class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-slate-700 flex items-center justify-center text-slate-200 font-bold text-sm">3</div>
+        <div>
+          <h2 class="text-2xl font-bold text-slate-100">行動項目</h2>
+          <p class="text-sm text-slate-400 mt-1">本次評估的後續步驟。</p>
+        </div>
+      </header>
+      <!-- /COMPONENT: SECTION_HEADER -->
+
+      <!-- COMPONENT: CHECKLIST -->
+      <div class="rounded-xl border border-slate-700/60 p-5">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs uppercase tracking-wider text-slate-500">完成度</span>
+          <span class="text-xs text-slate-400" x-text="`${doneCount} / ${todos.length}`"></span>
+        </div>
+        <div class="h-1 rounded-full bg-slate-800 overflow-hidden mb-5">
+          <div class="h-full bg-slate-400 transition-all duration-700"
+               :style="`width: ${todos.length ? (doneCount / todos.length * 100) : 0}%`"></div>
+        </div>
+        <ul class="space-y-3">
+          <template x-for="todo in todos" :key="todo.id">
+            <li class="flex items-center gap-3 cursor-pointer group" @click="toggleTodo(todo.id)">
+              <span class="w-5 h-5 rounded flex-shrink-0 flex items-center justify-center text-xs transition-colors"
+                    :class="todo.done
+                      ? 'bg-emerald-500 text-slate-900'
+                      : 'bg-slate-800 border border-slate-600 group-hover:border-slate-500'">
+                <span x-show="todo.done">✓</span>
+              </span>
+              <span class="text-sm transition-colors"
+                    :class="todo.done ? 'line-through text-slate-600' : 'text-slate-300'"
+                    x-text="todo.title"></span>
+            </li>
+          </template>
+        </ul>
+      </div>
+      <!-- /COMPONENT: CHECKLIST -->
+
+    </section>
+
+    <footer class="pt-8 text-center">
+      <p class="text-xs text-slate-600">由 <span class="text-slate-500">share-html</span> 產生 · minimal template</p>
+    </footer>
+
   </div>
 
   <script>
     function page() {
       return {
+        todos: [
+          { id: 1, title: '在 staging 環境驗證 Gin 效能基準', done: true },
+          { id: 2, title: '制定 Fiber v3 GA 後的試點計畫', done: false },
+          { id: 3, title: '更新技術雷達文件，記錄本次評估結論', done: false },
+          { id: 4, title: '與 infra 團隊確認部署流程相容性', done: false },
+        ],
+        get doneCount() { return this.todos.filter(t => t.done).length; },
+        toggleTodo(id) {
+          const t = this.todos.find(x => x.id === id);
+          if (t) t.done = !t.done;
+        },
         init() {
           const mo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           if (mo) return;

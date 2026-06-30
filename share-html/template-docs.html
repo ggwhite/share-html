@@ -24,6 +24,13 @@
       [data-reveal] { opacity: 1; transform: none; transition: none; }
     }
     .hljs { background: transparent !important; padding: 0 !important; }
+    @media (max-width: 767px) {
+      aside.sticky { display: none; }
+    }
+    @media print {
+      .fixed, aside.sticky { display: none !important; }
+      body { background: white; }
+    }
     .text-gradient {
       background-image: linear-gradient(to right, #0891b2, #3b82f6, #7c3aed);
       -webkit-background-clip: text;
@@ -34,7 +41,7 @@
 </head>
 <body class="min-h-screen">
 
-  <div x-data="page()" class="grid grid-cols-[260px_minmax(0,1fr)] max-w-6xl mx-auto px-6 pt-16 pb-24 gap-10">
+  <div x-data="page()" class="grid md:grid-cols-[260px_minmax(0,1fr)] max-w-6xl mx-auto px-6 pt-16 pb-24 md:gap-10 gap-6">
 
   <!-- COMPONENT: TOP_BAR -->
   <div class="fixed top-0 left-0 right-0 h-[2px] z-50 bg-slate-200/50">
@@ -44,7 +51,7 @@
   <!-- /COMPONENT: TOP_BAR -->
 
     <!-- COMPONENT: STICKY_TOC -->
-    <aside class="sticky top-12 self-start">
+    <aside class="hidden md:block sticky top-12 self-start">
       <div class="text-xs uppercase tracking-widest text-slate-400 mb-4">本頁導覽</div>
       <nav class="space-y-1 text-sm">
         <template x-for="item in toc" :key="item.id">
@@ -198,6 +205,175 @@ npm run dev</code></pre>
 
       </section>
 
+      <section id="section-4">
+        <!-- COMPONENT: SECTION_HEADER -->
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 via-blue-500 to-violet-500 flex items-center justify-center text-white font-bold text-sm">4</div>
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">API 參考</h2>
+            <p class="text-sm text-slate-500 mt-1">常用端點說明與範例回應。</p>
+          </div>
+        </header>
+        <!-- /COMPONENT: SECTION_HEADER -->
+
+        <!-- COMPONENT: TABS -->
+        <div class="rounded-lg bg-white border border-slate-200 overflow-hidden">
+          <div class="flex border-b border-slate-200">
+            <template x-for="t in tabs" :key="t.id">
+              <button @click="activeTab = t.id"
+                      :class="activeTab === t.id
+                        ? 'text-cyan-700 border-cyan-600 bg-cyan-50/50'
+                        : 'text-slate-400 border-transparent hover:text-slate-600'"
+                      class="flex-1 px-5 py-3 text-sm font-medium border-b-2 transition-colors"
+                      x-text="t.label"></button>
+            </template>
+          </div>
+          <div class="p-6">
+            <div x-show="activeTab === 'get'" x-cloak>
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-mono font-semibold">GET</span>
+                <code class="text-sm font-mono text-slate-700">/api/v1/users/:id</code>
+              </div>
+              <p class="text-sm text-slate-600 mb-4">取得指定使用者的詳細資訊。需要 Bearer token 驗證。</p>
+              <div class="relative rounded-lg overflow-hidden border border-slate-200">
+                <div class="flex items-center justify-between px-4 py-2 border-b border-slate-200 bg-slate-100">
+                  <span class="text-xs font-mono text-slate-500">Response 200</span>
+                </div>
+                <pre class="!m-0 p-4 bg-slate-50 overflow-x-auto"><code class="language-json text-sm">{
+  "id": "usr_01H8...",
+  "name": "白小明",
+  "email": "white@example.com",
+  "role": "admin",
+  "created_at": "2026-01-15T08:30:00Z"
+}</code></pre>
+              </div>
+            </div>
+            <div x-show="activeTab === 'post'" x-cloak>
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-mono font-semibold">POST</span>
+                <code class="text-sm font-mono text-slate-700">/api/v1/users</code>
+              </div>
+              <p class="text-sm text-slate-600 mb-4">建立新使用者。需要 admin 權限。</p>
+              <div class="relative rounded-lg overflow-hidden border border-slate-200">
+                <div class="flex items-center justify-between px-4 py-2 border-b border-slate-200 bg-slate-100">
+                  <span class="text-xs font-mono text-slate-500">Request Body</span>
+                </div>
+                <pre class="!m-0 p-4 bg-slate-50 overflow-x-auto"><code class="language-json text-sm">{
+  "name": "新使用者",
+  "email": "new@example.com",
+  "role": "viewer"
+}</code></pre>
+              </div>
+            </div>
+            <div x-show="activeTab === 'delete'" x-cloak>
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs px-2 py-0.5 rounded bg-red-100 text-red-700 font-mono font-semibold">DELETE</span>
+                <code class="text-sm font-mono text-slate-700">/api/v1/users/:id</code>
+              </div>
+              <p class="text-sm text-slate-600 mb-4">刪除指定使用者。此操作不可逆，需要 admin 權限。</p>
+              <div class="flex items-start gap-3 rounded-lg border-l-2 border-red-400 bg-red-50 px-4 py-3 mt-4">
+                <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-red-100 text-red-700 shrink-0 mt-0.5">DANGER</span>
+                <p class="text-sm text-slate-700">刪除操作會同時移除該使用者的所有關聯資料，包含操作紀錄與權限設定。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /COMPONENT: TABS -->
+      </section>
+
+      <section id="section-5">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 via-blue-500 to-violet-500 flex items-center justify-center text-white font-bold text-sm">5</div>
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">版本歷史</h2>
+            <p class="text-sm text-slate-500 mt-1">主要版本變更紀錄。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: TIMELINE -->
+        <ol class="relative border-l-2 border-slate-200 pl-6 space-y-6 ml-2">
+          <li class="relative">
+            <span class="absolute -left-[33px] top-1.5 w-4 h-4 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 ring-2 ring-white"></span>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="text-xs font-mono text-cyan-700 font-semibold">v2.0.0</span>
+              <span class="text-xs text-slate-400">2026-06-15</span>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">重大更新</h3>
+            <p class="text-sm text-slate-500 mt-1">全面改寫 API 層，採用 RESTful 設計。新增 OAuth 2.0 驗證、Rate Limiting、Webhook 回呼。</p>
+          </li>
+          <li class="relative">
+            <span class="absolute -left-[33px] top-1.5 w-4 h-4 rounded-full bg-blue-400 ring-2 ring-white"></span>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="text-xs font-mono text-blue-600 font-semibold">v1.5.0</span>
+              <span class="text-xs text-slate-400">2026-03-20</span>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">功能增強</h3>
+            <p class="text-sm text-slate-500 mt-1">新增批次操作 API、改善錯誤回應格式、支援 CSV 匯出。</p>
+          </li>
+          <li class="relative">
+            <span class="absolute -left-[33px] top-1.5 w-4 h-4 rounded-full bg-slate-300 ring-2 ring-white"></span>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="text-xs font-mono text-slate-500 font-semibold">v1.0.0</span>
+              <span class="text-xs text-slate-400">2025-12-01</span>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">初始版本</h3>
+            <p class="text-sm text-slate-500 mt-1">基礎 CRUD API、JWT 驗證、PostgreSQL 資料層。</p>
+          </li>
+        </ol>
+        <!-- /COMPONENT: TIMELINE -->
+      </section>
+
+      <section id="section-6">
+        <header class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 via-blue-500 to-violet-500 flex items-center justify-center text-white font-bold text-sm">6</div>
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">方案比較</h2>
+            <p class="text-sm text-slate-500 mt-1">不同版本的功能差異對照。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: COMPARISON_TABLE -->
+        <div class="rounded-lg bg-white border border-slate-200 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-slate-200 bg-slate-50">
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">功能</th>
+                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-500">Community</th>
+                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-cyan-700 bg-cyan-50/50">Pro（推薦）</th>
+                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-500">Enterprise</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr>
+                <td class="px-4 py-2.5 text-slate-700">API 呼叫次數</td>
+                <td class="px-4 py-2.5 text-center text-slate-500">1,000 / 月</td>
+                <td class="px-4 py-2.5 text-center text-cyan-700 bg-cyan-50/30">50,000 / 月</td>
+                <td class="px-4 py-2.5 text-center text-slate-600">無限制</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 text-slate-700">Webhook</td>
+                <td class="px-4 py-2.5 text-center text-red-500">✗</td>
+                <td class="px-4 py-2.5 text-center text-emerald-600 bg-cyan-50/30">✓</td>
+                <td class="px-4 py-2.5 text-center text-emerald-600">✓</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 text-slate-700">SSO / SAML</td>
+                <td class="px-4 py-2.5 text-center text-red-500">✗</td>
+                <td class="px-4 py-2.5 text-center text-red-500 bg-cyan-50/30">✗</td>
+                <td class="px-4 py-2.5 text-center text-emerald-600">✓</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 text-slate-700">SLA 保證</td>
+                <td class="px-4 py-2.5 text-center text-slate-500">—</td>
+                <td class="px-4 py-2.5 text-center text-cyan-700 bg-cyan-50/30">99.9%</td>
+                <td class="px-4 py-2.5 text-center text-slate-600">99.99%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- /COMPONENT: COMPARISON_TABLE -->
+      </section>
+
       <section id="sources" class="border-t border-slate-200 pt-10">
         <header class="flex items-start gap-4 mb-6">
           <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-bold">§</div>
@@ -235,6 +411,12 @@ npm run dev</code></pre>
 
       </section>
 
+      <!-- COMPONENT: FOOTER -->
+      <div class="border-t border-slate-200 mt-10 pt-6 pb-4 text-center">
+        <p class="text-xs text-slate-400">由 <span class="text-slate-500">share-html</span> 產生 · docs template</p>
+      </div>
+      <!-- /COMPONENT: FOOTER -->
+
     </main>
   </div>
 
@@ -247,10 +429,20 @@ npm run dev</code></pre>
           { id: 'section-1', label: '§1 概述' },
           { id: 'section-2', label: '§2 安裝指南' },
           { id: 'section-3', label: '§3 設定說明' },
+          { id: 'section-4', label: '§4 API 參考' },
+          { id: 'section-5', label: '§5 版本歷史' },
+          { id: 'section-6', label: '§6 方案比較' },
           { id: 'sources',   label: '參考資料' },
         ],
 
         scrollProgress: 0,
+
+        activeTab: 'get',
+        tabs: [
+          { id: 'get',    label: 'GET' },
+          { id: 'post',   label: 'POST' },
+          { id: 'delete', label: 'DELETE' },
+        ],
 
         copyCode(ev) {
           const btn = ev.currentTarget;

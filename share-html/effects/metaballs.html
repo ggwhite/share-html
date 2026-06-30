@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effect: Metaballs</title>
+  <style>body { margin: 0; background: #0b1020; min-height: 100vh; overflow: hidden; }</style>
+</head>
+<body>
+
 <!-- EFFECT: METABALLS -->
 <canvas id="mb-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;image-rendering:pixelated;"></canvas>
 <script>
@@ -8,7 +18,6 @@
   const SCALE = 4;
   const THRESHOLD = 1.0;
 
-  // full-screen CSS, low-res pixel buffer
   canvas.style.width  = '100vw';
   canvas.style.height = '100vh';
 
@@ -66,7 +75,7 @@
 
         if(sum > THRESHOLD){
           const idx = (py * cw + px) * 4;
-          const alpha = Math.min(sum * 15, 40);
+          const alpha = Math.min(sum * 25, 80);
           data[idx]   = wr / sum;
           data[idx+1] = wg / sum;
           data[idx+2] = wb / sum;
@@ -101,3 +110,11 @@
 })();
 </script>
 <!-- /EFFECT: METABALLS -->
+
+<div style="position:relative;z-index:1;color:#94a3b8;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+  <h1 style="font-size:2.5rem;color:#e2e8f0;margin:0 0 8px;">Metaballs</h1>
+  <p style="font-size:0.875rem;margin:0;">share-html · Heavy effect · Merging color spheres</p>
+</div>
+
+</body>
+</html>
