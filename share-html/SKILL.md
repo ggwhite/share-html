@@ -5,8 +5,8 @@ description: >-
   shared with other people — research reports, comparison pages, decision
   documents, status updates, weekly reports, kanban-style trackers, one-pagers.
   Produces a self-contained .html file that opens with a double-click and
-  renders with CDN-loaded Tailwind / Alpine.js. Five template styles available:
-  editorial (default), briefing, dashboard, docs, minimal.
+  renders with CDN-loaded Tailwind / Alpine.js. Six template styles available:
+  editorial (default), briefing, dashboard, docs, minimal, handdrawn.
 metadata:
   author: ggwhite
   version: "1.0.0"
@@ -27,12 +27,14 @@ metadata:
 | dashboard | `template-dashboard.html` | 數據看板、監控報告 |
 | docs | `template-docs.html` | RFC、技術文件、操作手冊 |
 | minimal | `template-minimal.html` | 快速分享一個結論或對照 |
+| handdrawn | `template-handdrawn.html` | 會議結論、需求拆解、非正式提案、手帳/白板風摘要 |
 
 使用者沒指定時，依內容性質自動選：
 - 數據多 → dashboard
 - 長文/步驟多 → docs
 - 只有 1-2 個重點 → minimal
 - 給主管/非技術人看 → briefing
+- 想要手帳、白板、草稿感，但仍需繁中可讀 → handdrawn
 - 其他 → editorial（預設）
 
 ## Style rules — editorial
@@ -119,6 +121,25 @@ Layout 同 editorial（TOC + 內容雙欄）。
 ## Style rules — minimal
 
 同 editorial 配色但無漸層。主色 `slate-300`。SECTION_HEADER 編號徽章 `bg-slate-700`。Layout：無 TOC、無 TOP_BAR，單欄 `max-w-2xl` 置中。
+
+## Style rules — handdrawn
+
+| 角色 | Token | Hex |
+|---|---|---|
+| 背景 | `#fbfaf4` + 淡格線 + radial wash | 紙張/白板混合 |
+| 主文字 | `#243238` / `#334148` | 深墨色 |
+| 次文字 | `#66757f` | 灰藍 |
+| 主色 | teal | `#149a9a` |
+| 警示/重點 | coral | `#e45d4f` |
+| 補色 | indigo / amber / green | `#5967c5` / `#f1b94d` / `#5d9b63` |
+| 手寫字體 | `Jason Handwriting` via jsDelivr CDN | 用於 H1/H2/H3、TOC、chip、短標籤、任務清單 |
+| 正文字體 | `-apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif` | 長文可讀性優先 |
+| 手繪線條 | Rough.js `rough.svg()` via jsDelivr CDN | progressive enhancement，替 paper-panel / card / chip / section mark 疊 rough SVG |
+| 手繪感 | 不規則 border-radius、紙張 shadow、marker underline、tape/pin 裝飾 | 字體 + rough.js + 版面一起承擔 |
+
+Layout：TOC + 內容雙欄，行動版隱藏 TOC。適合會議結論、需求拆解、工作坊筆記與非正式技術提案。
+
+**原則**：手寫感要出現在標題與短文案，否則只會像一般文件加裝飾。長段正文仍保留系統字，避免整頁閱讀負擔。rough.js 只做漸進增強；若 CDN 載入失敗，CSS border 仍要可用。若使用者明確要求更強的手帳感，可把 note / checklist / quote 類短內容也套手寫字體。
 
 ## Scroll 進場動畫
 

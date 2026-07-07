@@ -67,6 +67,16 @@ Stripped-down single column, no TOC, no progress bar. Just the content, centered
 - No gradients, muted slate palette
 - Minimal JavaScript footprint
 
+### handdrawn
+
+Notebook/whiteboard style for meeting notes, decision records, requirement breakdowns, and workshop summaries. The template uses JasonHandwriting for Traditional Chinese headings and short labels, Rough.js for sketchy borders, and stable system fonts for longer paragraphs.
+
+![handdrawn](screenshots/handdrawn.png)
+
+- Traditional Chinese handwriting on headings, labels, TOC, and checklist text
+- Rough.js sketch borders, marker underline, sticky notes, and whiteboard flow blocks
+- Lightweight Alpine interactions for TOC and checklist
+
 ## Canvas Effects
 
 Nine optional visual effects you can drop into any template. Add them to `<body>` before your content.
