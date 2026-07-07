@@ -136,10 +136,11 @@ Layout 同 editorial（TOC + 內容雙欄）。
 | 正文字體 | `-apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif` | 長文可讀性優先 |
 | 手繪線條 | Rough.js `rough.svg()` via jsDelivr CDN | progressive enhancement，替 paper-panel / card / chip / section mark 疊 rough SVG |
 | 手繪感 | 不規則 border-radius、紙張 shadow、marker underline、tape/pin 裝飾 | 字體 + rough.js + 版面一起承擔 |
+| 圖表 | `chart.xkcd` via jsDelivr CDN（`XKCD_LINE_CHART` / `XKCD_BAR_CHART`） | 真正手抖線條的折線圖/長條圖，配色沿用 teal/coral/indigo/amber/green，字體沿用手寫字體 |
 
 Layout：TOC + 內容雙欄，行動版隱藏 TOC。適合會議結論、需求拆解、工作坊筆記與非正式技術提案。
 
-**原則**：手寫感要出現在標題與短文案，否則只會像一般文件加裝飾。長段正文仍保留系統字，避免整頁閱讀負擔。rough.js 只做漸進增強；若 CDN 載入失敗，CSS border 仍要可用。若使用者明確要求更強的手帳感，可把 note / checklist / quote 類短內容也套手寫字體。
+**原則**：手寫感要出現在標題與短文案，否則只會像一般文件加裝飾。長段正文仍保留系統字，避免整頁閱讀負擔。rough.js / chart.xkcd 只做漸進增強；若 CDN 載入失敗，CSS border 仍要可用、圖表退回文字摘要（`.chart-fallback`）。若使用者明確要求更強的手帳感，可把 note / checklist / quote 類短內容也套手寫字體。
 
 ## Scroll 進場動畫
 

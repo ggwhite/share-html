@@ -6,6 +6,7 @@
   <title>share-html · handdrawn template</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.xkcd@2/dist/chart.xkcd.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <style>
     @font-face {
@@ -79,7 +80,7 @@
       top: 28px;
       align-self: start;
       transform: rotate(-0.5deg);
-      font-size: 16px;
+      font-size: 18px;
     }
 
     .paper-panel {
@@ -133,6 +134,7 @@
       letter-spacing: 0.02em;
       text-transform: uppercase;
       font-weight: 900;
+      font-size: 16px;
     }
 
     .rough-card {
@@ -154,9 +156,9 @@
       border: 2px solid var(--line);
       border-radius: 999px;
       background: #fffdf7;
-      padding: 5px 10px;
+      padding: 6px 14px;
       box-shadow: 2px 3px 0 rgba(36, 50, 56, 0.12);
-      font-size: 12px;
+      font-size: 16px;
       font-weight: 900;
     }
 
@@ -179,6 +181,7 @@
       box-shadow: 3px 4px 0 rgba(36, 50, 56, 0.12);
       color: var(--teal);
       font-weight: 900;
+      font-size: 20px;
     }
 
     .rough-svg {
@@ -204,6 +207,14 @@
       background-image: linear-gradient(transparent calc(100% - 1px), rgba(36, 50, 56, 0.15) 1px);
       background-size: 100% 28px;
       line-height: 28px;
+    }
+
+    .chart-wrap {
+      position: relative;
+    }
+
+    .chart-wrap svg.xkcd-chart text {
+      font-family: var(--hand);
     }
 
     .flow-arrow {
@@ -277,12 +288,12 @@
     <aside class="toc">
       <div class="paper-panel px-4 py-5">
         <span class="pin -top-2 right-7"></span>
-        <div class="scribble-label text-[11px] font-black text-slate-500 mb-4">board index</div>
+        <div class="scribble-label font-black text-slate-500 mb-4">board index</div>
         <nav class="space-y-2">
           <template x-for="item in toc" :key="item.id">
             <a :href="'#' + item.id"
                :class="activeSection === item.id ? 'bg-[#f1b94d]/35 border-[#243238] text-[#243238]' : 'border-transparent text-[#66757f] hover:text-[#243238]'"
-               class="block rounded-lg border-2 px-3 py-2 text-sm font-bold transition-colors"
+               class="block rounded-lg border-2 px-3 py-2 text-base font-bold transition-colors"
                x-text="item.label"></a>
           </template>
         </nav>
@@ -308,15 +319,15 @@
         </p>
         <div class="mt-8 grid gap-3 sm:grid-cols-3">
           <div class="rough-card px-4 py-3">
-            <div class="scribble-label text-xs font-black text-[#149a9a]">tone</div>
+            <div class="scribble-label font-black text-[#149a9a]">tone</div>
             <div class="mt-1 font-bold">像草稿，但不潦草</div>
           </div>
           <div class="rough-card px-4 py-3">
-            <div class="scribble-label text-xs font-black text-[#e45d4f]">type</div>
+            <div class="scribble-label font-black text-[#e45d4f]">type</div>
             <div class="mt-1 font-bold">繁中維持清楚</div>
           </div>
           <div class="rough-card px-4 py-3">
-            <div class="scribble-label text-xs font-black text-[#5967c5]">share</div>
+            <div class="scribble-label font-black text-[#5967c5]">share</div>
             <div class="mt-1 font-bold">單檔 HTML 可傳送</div>
           </div>
         </div>
@@ -360,19 +371,19 @@
         <div class="rough-card p-5 md:p-6 bg-white/80">
           <div class="flex flex-col gap-4 md:flex-row md:items-center">
             <div class="rough-card px-4 py-3 bg-[#f2f7f3] flex-1">
-              <div class="scribble-label text-xs font-black text-[#149a9a]">input</div>
+              <div class="scribble-label font-black text-[#149a9a]">input</div>
               <div class="mt-1 font-black">整理原始內容</div>
               <p class="mt-1 text-sm leading-6 text-[#66757f]">會議記錄、需求草稿、MR 摘要</p>
             </div>
             <div class="flow-arrow hidden md:block"></div>
             <div class="rough-card px-4 py-3 bg-[#fff7e7] flex-1">
-              <div class="scribble-label text-xs font-black text-[#c48315]">shape</div>
+              <div class="scribble-label font-black text-[#c48315]">shape</div>
               <div class="mt-1 font-black">拆成便條區塊</div>
               <p class="mt-1 text-sm leading-6 text-[#66757f]">結論、風險、下一步、待確認</p>
             </div>
             <div class="flow-arrow hidden md:block"></div>
             <div class="rough-card px-4 py-3 bg-[#f6f4ff] flex-1">
-              <div class="scribble-label text-xs font-black text-[#5967c5]">share</div>
+              <div class="scribble-label font-black text-[#5967c5]">share</div>
               <div class="mt-1 font-black">輸出單檔 HTML</div>
               <p class="mt-1 text-sm leading-6 text-[#66757f]">可搜尋、可複製、可直接傳</p>
             </div>
@@ -393,17 +404,17 @@
         <!-- COMPONENT: NOTE_GRID -->
         <div class="grid gap-4 md:grid-cols-3">
           <article class="rough-card p-5 bg-[#f2f7f3]">
-            <div class="scribble-label text-xs font-black text-[#149a9a]">decision</div>
+            <div class="scribble-label font-black text-[#149a9a]">decision</div>
             <h3 class="mt-2 text-xl font-black">先採低風險方案</h3>
             <p class="mt-3 text-sm leading-7 text-[#52636c]">正式環境採用既有流程，手繪模板先用於內部分享與會議摘要。</p>
           </article>
           <article class="rough-card p-5 bg-[#fff7e7]">
-            <div class="scribble-label text-xs font-black text-[#c48315]">risk</div>
+            <div class="scribble-label font-black text-[#c48315]">risk</div>
             <h3 class="mt-2 text-xl font-black">不要過度裝飾</h3>
             <p class="mt-3 text-sm leading-7 text-[#52636c]">如果每個元件都旋轉、每段都 marker，會變成可讀性負債。</p>
           </article>
           <article class="rough-card p-5 bg-[#fff1ef]">
-            <div class="scribble-label text-xs font-black text-[#e45d4f]">next</div>
+            <div class="scribble-label font-black text-[#e45d4f]">next</div>
             <h3 class="mt-2 text-xl font-black">用截圖做 QA</h3>
             <p class="mt-3 text-sm leading-7 text-[#52636c]">每次調整模板後產 desktop/mobile 截圖，確認中文與表格不爆版。</p>
           </article>
@@ -447,6 +458,46 @@
         <!-- /COMPONENT: CHECKLIST -->
       </section>
 
+      <section id="section-5" class="space-y-6" data-reveal>
+        <header class="section-title">
+          <div class="section-mark">5</div>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-black">資料視覺化</h2>
+            <p class="mt-1 text-sm md:text-base text-[#66757f]">用 chart.xkcd 畫圖，線條是真的手抖，不是 CSS 裝出來的。</p>
+          </div>
+        </header>
+
+        <!-- COMPONENT: XKCD_LINE_CHART -->
+        <div class="rough-card p-5 md:p-6 bg-white/80">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span class="chip"><span class="w-2 h-2 rounded-full bg-[#149a9a]"></span>line chart</span>
+            <span class="text-sm font-bold text-[#66757f]">近 8 週手繪模板使用便條數（累積）</span>
+          </div>
+          <div class="chart-wrap" style="min-height: 260px;">
+            <svg class="xkcd-chart" data-chart="line" style="width:100%; height:280px; display:block;"></svg>
+            <p class="chart-fallback hidden note-line text-sm leading-7 text-[#334148]">
+              第 1～8 週累積便條數：3 → 8 → 14 → 22 → 31 → 45 → 58 → 72。
+            </p>
+          </div>
+        </div>
+        <!-- /COMPONENT: XKCD_LINE_CHART -->
+
+        <!-- COMPONENT: XKCD_BAR_CHART -->
+        <div class="rough-card p-5 md:p-6 bg-white/80">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span class="chip"><span class="w-2 h-2 rounded-full bg-[#e45d4f]"></span>bar chart</span>
+            <span class="text-sm font-bold text-[#66757f]">便條分類統計</span>
+          </div>
+          <div class="chart-wrap" style="min-height: 260px;">
+            <svg class="xkcd-chart" data-chart="bar" style="width:100%; height:280px; display:block;"></svg>
+            <p class="chart-fallback hidden note-line text-sm leading-7 text-[#334148]">
+              會議結論 18・需求拆解 12・風險 7・待確認 9。
+            </p>
+          </div>
+        </div>
+        <!-- /COMPONENT: XKCD_BAR_CHART -->
+      </section>
+
       <section id="sources" class="paper-panel px-5 py-5 md:px-7 md:py-6" data-reveal>
         <span class="tape -top-4 right-12 rotate-2"></span>
         <!-- COMPONENT: SOURCES -->
@@ -478,6 +529,7 @@
           { id: 'section-2', label: '白板流程' },
           { id: 'section-3', label: '決策便條' },
           { id: 'section-4', label: '任務清單' },
+          { id: 'section-5', label: '資料視覺化' },
           { id: 'sources', label: '適合場景' },
         ],
         todos: [
@@ -497,6 +549,7 @@
           this.$nextTick(() => {
             document.body.classList.add('reveal-ready');
             this.drawRoughAccents();
+            this.drawCharts();
 
             const sections = document.querySelectorAll('main > section[id]');
             const navObserver = new IntersectionObserver(entries => {
@@ -522,6 +575,7 @@
 
             window.addEventListener('resize', this.debounce(() => {
               this.drawRoughAccents();
+              this.drawCharts();
             }, 180), { passive: true });
           });
         },
@@ -567,6 +621,52 @@
 
             svg.appendChild(node);
             target.appendChild(svg);
+          });
+        },
+        drawCharts() {
+          const charts = document.querySelectorAll('.xkcd-chart');
+          if (typeof chartXkcd === 'undefined') {
+            charts.forEach(svg => { svg.innerHTML = ''; });
+            document.querySelectorAll('.chart-fallback').forEach(el => el.classList.remove('hidden'));
+            return;
+          }
+          document.querySelectorAll('.chart-fallback').forEach(el => el.classList.add('hidden'));
+
+          const fontFamily = '"Jason Handwriting", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", cursive';
+          const dataColors = ['#149a9a', '#e45d4f', '#5967c5', '#f1b94d', '#5d9b63'];
+          const baseOptions = {
+            strokeColor: '#243238',
+            backgroundColor: 'transparent',
+            fontFamily,
+            dataColors,
+          };
+
+          charts.forEach(svg => {
+            if (svg.offsetWidth < 12) return;
+            svg.innerHTML = '';
+            const type = svg.dataset.chart;
+
+            if (type === 'line') {
+              new chartXkcd.Line(svg, {
+                title: '近 8 週累積便條數',
+                xLabel: '週次',
+                yLabel: '張數',
+                data: {
+                  labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8'],
+                  datasets: [{ label: '累積便條數', data: [3, 8, 14, 22, 31, 45, 58, 72] }],
+                },
+                options: { ...baseOptions, showLegend: false },
+              });
+            } else if (type === 'bar') {
+              new chartXkcd.Bar(svg, {
+                title: '便條分類統計',
+                data: {
+                  labels: ['會議結論', '需求拆解', '風險', '待確認'],
+                  datasets: [{ data: [18, 12, 7, 9] }],
+                },
+                options: { ...baseOptions, yTickCount: 4 },
+              });
+            }
           });
         },
       };
