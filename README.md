@@ -1,83 +1,146 @@
-# share-html
+<div align="center">
 
-Self-contained HTML templates for shareable reports. Double-click to open, drag to share — no build step, no server.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="assets/banner-light.svg" />
+  <img src="assets/banner-dark.svg" alt="share-html" width="720" />
+</picture>
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill that generates single-file `.html` reports with interactive components, data visualization, and optional canvas effects.
+**Self-contained HTML templates for shareable reports — double-click to open, drag to share.**
 
-## Install
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill that generates single-file `.html`
+reports with **interactive components**, **data visualization**, and optional **canvas effects**.
+No build step, no server.
+
+[![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-D97757)](https://docs.anthropic.com/en/docs/claude-code)
+[![Templates](https://img.shields.io/badge/templates-6-22d3ee)](#-templates)
+[![Effects](https://img.shields.io/badge/canvas%20effects-9-818cf8)](#-canvas-effects)
+[![Zero build](https://img.shields.io/badge/build%20step-none-34d399)](#-tech-stack)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
+[Install](#-install) · [Features](#-features) · [Templates](#-templates) · [Canvas Effects](#-canvas-effects) · [Usage](#-usage) · [Tech Stack](#-tech-stack) · [License](#-license)
+
+</div>
+
+---
+
+<div align="center">
+  <img src="assets/tour.webp" alt="share-html tour — the editorial report scrolls past its sticky TOC and stat cards; the briefing deck snaps from slide to slide; the dashboard switches from overview to detail to trend tabs; the light docs page and the single-column minimal page scroll by; the handdrawn notebook shows sketchy borders and sticky notes; then the aurora, particles and metaballs canvas effects animate" width="900" />
+</div>
+
+## 📦 Install
 
 ```bash
 npx skills add ggwhite/share-html
 ```
 
-## Templates
+## ✨ Features
 
-### editorial (default)
+<table>
+<tr>
+<td width="42%" valign="middle">
 
-Deep dark theme with sticky TOC, gradient accents, and 18 interactive components. Best for research reports, code reviews, and comparative analysis.
+### editorial — the default report
 
-![editorial](screenshots/editorial.png)
+A deep dark theme with a **sticky TOC** that tracks your scroll, gradient accents, and
+**18 interactive components**. Filter a **searchable findings table**, drag **Kanban**
+cards, read **Chart.js radar charts**, and tick off a **checklist with a progress bar**.
+Best for research reports, code reviews, and comparative analysis.
 
-- Sticky left TOC with scroll tracking
-- Searchable/filterable data tables
-- Drag-and-drop Kanban boards
-- Chart.js radar charts and sparklines
-- Interactive checklists with progress bars
+</td>
+<td><img src="assets/editorial.webp" alt="editorial — scroll past the hero to the stats and findings table, filter the table to 嚴重 (critical) and back to 全部 (all), scroll to the action checklist and tick two items, scroll back to the top" /></td>
+</tr>
+<tr>
+<td width="42%" valign="middle">
 
-### briefing
+### briefing — one idea per screen
 
-Full-page slides with warm amber tones. Each section fills the viewport with large text and key metrics. Built for weekly reports and executive summaries.
+Full-page **slides** with warm amber tones. Each section fills the viewport with large
+text and **animated stat counters**, glued together with **scroll snap** and bottom dot
+navigation. Built for weekly reports and executive summaries.
 
-![briefing](screenshots/briefing.png)
+</td>
+<td><img src="assets/briefing.webp" alt="briefing — the title slide, then four slides snap into place one after another, then back to the first slide" /></td>
+</tr>
+<tr>
+<td width="42%" valign="middle">
 
-- One section per screen with scroll snap
-- Bottom dot navigation
-- Animated stat counters
-- Warm amber/orange/rose gradient accents
+### dashboard — dense, tabbed data
 
-### dashboard
+Three **tab panels** — overview, detail, and trends — packed with metrics, sparklines,
+radar charts, and tables in **2–3 column grids**. Charts initialize **lazily** the first
+time their tab opens.
 
-Tab-based data dashboard with dense grid layouts. Three panels — overview, detail, and trends — packed with metrics, charts, and tables.
+</td>
+<td><img src="assets/dashboard.webp" alt="dashboard — switch from 概覽 (overview) to 細節 (detail) to 趨勢 (trend) and back to overview, then scroll down the overview grid and back up" /></td>
+</tr>
+<tr>
+<td width="42%" valign="middle">
 
-![dashboard](screenshots/dashboard.png)
+### docs & minimal — light and lean
 
-- Tab switching with lazy chart initialization
-- Dense grid layouts (2-3 columns)
-- Radar charts, sparklines, and data tables
-- Real-time-style timestamp display
+**docs** is a clean white theme for technical documentation, with the same two-column
+TOC layout as editorial and **GitHub-style code highlighting**. **minimal** drops the
+TOC and progress bar entirely: one centered `max-w-2xl` column for sharing **one
+conclusion fast**.
 
-### docs
+</td>
+<td><img src="assets/light.webp" alt="docs then minimal — the docs page scrolls from the overview to the install guide and API reference; then the minimal single-column page scrolls down and back to the top" /></td>
+</tr>
+<tr>
+<td width="42%" valign="middle">
 
-Light theme for technical documentation. Same dual-column TOC layout as editorial, but with a clean white background and GitHub-style code highlighting.
+### handdrawn — notebook & whiteboard
 
-![docs](screenshots/docs.png)
+For meeting notes, decision records, and workshop summaries. **Rough.js** draws sketchy
+borders, marker underlines, and **sticky notes**; **JasonHandwriting** sets Traditional
+Chinese headings and labels while long paragraphs stay in readable system fonts.
 
-- Light background (`#f8fafc`)
-- GitHub code highlighting theme
-- Collapsible FAQ sections
-- Cyan/blue/violet accent gradient
+</td>
+<td><img src="assets/handdrawn.webp" alt="handdrawn — the notebook hero, scroll to the sticky-note section, then to the checklist and tick two items, then back to the top" /></td>
+</tr>
+<tr>
+<td width="42%" valign="middle">
 
-### minimal
+### Nine canvas effects
 
-Stripped-down single column, no TOC, no progress bar. Just the content, centered and clean. For when you need to share one conclusion or comparison fast.
+Drop an optional background effect into any template — from **light** CSS glows to
+**heavy** Perlin-noise flow fields. All of them respect **`prefers-reduced-motion`**
+and pause when the tab is hidden.
 
-![minimal](screenshots/minimal.png)
+</td>
+<td><img src="assets/effects.webp" alt="All nine effects animating in a 3 by 3 grid — gradient-flow, cursor-glow and particles (reacting to a moving cursor); parallax-depth (scrolling), matrix-rain and morphing-blobs; flow-field, aurora and metaballs" /></td>
+</tr>
+</table>
 
-- `max-w-2xl` centered layout
-- No gradients, muted slate palette
-- Minimal JavaScript footprint
+## 🖼 Templates
 
-### handdrawn
+Six templates. Claude picks the one that fits your content, or you can name one directly.
+Click a thumbnail for the full-size screenshot.
 
-Notebook/whiteboard style for meeting notes, decision records, requirement breakdowns, and workshop summaries. The template uses JasonHandwriting for Traditional Chinese headings and short labels, Rough.js for sketchy borders, and stable system fonts for longer paragraphs.
+<table>
+<tr>
+<td align="center" width="33%"><a href="screenshots/editorial.png"><img src="screenshots/editorial.png" alt="editorial template" /></a><br/><b>editorial</b> (default)<br/><sub>research reports · code reviews</sub></td>
+<td align="center" width="33%"><a href="screenshots/briefing.png"><img src="screenshots/briefing.png" alt="briefing template" /></a><br/><b>briefing</b><br/><sub>weekly reports · exec summaries</sub></td>
+<td align="center" width="33%"><a href="screenshots/dashboard.png"><img src="screenshots/dashboard.png" alt="dashboard template" /></a><br/><b>dashboard</b><br/><sub>metrics · monitoring</sub></td>
+</tr>
+<tr>
+<td align="center" width="33%"><a href="screenshots/docs.png"><img src="screenshots/docs.png" alt="docs template" /></a><br/><b>docs</b><br/><sub>technical documentation</sub></td>
+<td align="center" width="33%"><a href="screenshots/minimal.png"><img src="screenshots/minimal.png" alt="minimal template" /></a><br/><b>minimal</b><br/><sub>one conclusion, fast</sub></td>
+<td align="center" width="33%"><a href="screenshots/handdrawn.png"><img src="screenshots/handdrawn.png" alt="handdrawn template" /></a><br/><b>handdrawn</b><br/><sub>meeting notes · decisions</sub></td>
+</tr>
+</table>
 
-![handdrawn](screenshots/handdrawn.png)
+| Template | File | Highlights |
+|----------|------|------------|
+| editorial (default) | `template.html` | Sticky TOC with scroll tracking, searchable tables, drag-and-drop Kanban, radar charts & sparklines, checklists |
+| briefing | `template-briefing.html` | One section per screen with scroll snap, dot navigation, animated counters, amber/orange/rose accents |
+| dashboard | `template-dashboard.html` | Tab switching with lazy chart init, dense 2–3 column grids, real-time-style timestamp |
+| docs | `template-docs.html` | Light background (`#f8fafc`), GitHub code highlighting, collapsible FAQ, cyan/blue/violet accents |
+| minimal | `template-minimal.html` | `max-w-2xl` centered column, no gradients, muted slate palette, minimal JavaScript |
+| handdrawn | `template-handdrawn.html` | Handwriting headings & labels, Rough.js sketch borders, sticky notes, whiteboard flow blocks |
 
-- Traditional Chinese handwriting on headings, labels, TOC, and checklist text
-- Rough.js sketch borders, marker underline, sticky notes, and whiteboard flow blocks
-- Lightweight Alpine interactions for TOC and checklist
-
-## Canvas Effects
+## 🌌 Canvas Effects
 
 Nine optional visual effects you can drop into any template. Add them to `<body>` before your content.
 
@@ -94,8 +157,9 @@ Nine optional visual effects you can drop into any template. Add them to `<body>
 | metaballs | `effects/metaballs.html` | Heavy | Merging color spheres |
 
 All effects respect `prefers-reduced-motion` and pause when the tab is hidden.
+Every dark template works with all of them; the light docs template only suits cursor-glow.
 
-## Usage
+## 🚀 Usage
 
 Once installed, trigger the skill in Claude Code with:
 
@@ -106,7 +170,7 @@ Once installed, trigger the skill in Claude Code with:
 
 Claude will pick the best template based on your content, or you can specify one directly.
 
-## Tech Stack
+## 🧰 Tech Stack
 
 - [Tailwind CSS](https://tailwindcss.com/) (CDN)
 - [Alpine.js](https://alpinejs.dev/) (CDN)
@@ -116,6 +180,20 @@ Claude will pick the best template based on your content, or you can specify one
 
 Zero build step. Zero dependencies. Every output is a single `.html` file.
 
-## License
+<details>
+<summary>Regenerating the README clips</summary>
+
+The animated WebP clips in `assets/` are recorded from the real templates with Playwright:
+
+```bash
+pip install playwright && playwright install chromium   # once
+brew install ffmpeg webp                                 # ffmpeg + img2webp
+python3 scripts/record-clips.py                          # all clips
+python3 scripts/record-clips.py tour effects             # just some
+```
+
+</details>
+
+## 📄 License
 
 [MIT](LICENSE)
